@@ -3,8 +3,14 @@
 
 ##Content:
 
->>[1_1_0密文加密与解密](https://github.com/JamesonHuang/c_code/blob/master/C%E7%BB%8F%E5%85%B8%E5%AE%9E%E4%BE%8B%E4%BB%A3%E7%A0%81/1_1_X/1_1_0%E5%AF%86%E6%96%87%E5%8A%A0%E5%AF%86%E4%B8%8E%E8%A7%A3%E5%AF%86.cpp) 
+>###1_1_线性表（顺序表、链表） 
 
->>>* 1、原文中每个字母用该字母之后的第五个字母替换
+>>* [Sqlist.h](https://github.com/JamesonHuang/DataStructor/blob/master/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90/1_1_%E7%BA%BF%E6%80%A7%E8%A1%A8%EF%BC%88%E9%A1%BA%E5%BA%8F%E8%A1%A8%E3%80%81%E9%93%BE%E8%A1%A8%EF%BC%89/Sqlist.h)
+
+>>>定义顺序表的基本操作
 						
->>>* 2、原文字母都为大写
+>###1_1_线性表（顺序表、链表） 
+
+>>####* [Sqlist.h](https://github.com/JamesonHuang/DataStructor/blob/master/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90/1_1_%E7%BA%BF%E6%80%A7%E8%A1%A8%EF%BC%88%E9%A1%BA%E5%BA%8F%E8%A1%A8%E3%80%81%E9%93%BE%E8%A1%A8%EF%BC%89/Sqlist.h)
+
+>>>定义顺序表的基本操作
