@@ -1,4 +1,5 @@
-﻿#ifndef _DLINKLIST_H_
+//声明双向循环链表的基本操作
+#ifndef _DLINKLIST_H_
 
 typedef int ElemType;
 
