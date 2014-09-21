@@ -1,6 +1,8 @@
 //声明双向循环链表的基本操作
 #ifndef _DLINKLIST_H_
 
+#define _DLINKLIST_H_
+
 typedef int ElemType;
 
 typedef struct dNode
