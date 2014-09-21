@@ -1,4 +1,4 @@
-﻿//定义顺序表的基本操作
+//声明链表的基本操作
 #ifndef _LINKLIST_H_
 
 typedef int ElemType;
