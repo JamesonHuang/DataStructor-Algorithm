@@ -1,4 +1,8 @@
-﻿//@description: 实现链栈的基本操作
+﻿/*@description: 实现链栈的基本操作
+﻿ *PS:因为使用了模板编程的方式，vs2010环境下，无法实现类模板分离编译，
+﻿ *因此，实现代码也放在头文件中，找时间测试下gcc下可否实现类模板分离编译~~
+  */
+
 #ifndef _LINKSTACK_H_
 #define _LINKSTACK_H_
 
