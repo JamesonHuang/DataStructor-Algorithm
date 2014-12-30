@@ -1,4 +1,4 @@
-/*********************************************************************
+﻿/*********************************************************************
 	@ Title:			实现二叉树基本操作	
 
 	@ Description:		
@@ -98,6 +98,10 @@ BinaryTree<T>::BinaryTree(const string &s){
 template <typename T>
 TreeNode<T>* BinaryTree<T>::createBTree(const string &s, int &i){
 	TreeNode<T>* BTree; 
+	if(s.empty() ){
+		return NULL;
+	}
+
 	if(s[i] == '#'){
 		return NULL;
 	}
