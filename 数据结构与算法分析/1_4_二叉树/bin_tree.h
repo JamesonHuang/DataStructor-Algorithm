@@ -45,30 +45,31 @@ class BinaryTree{
 public:
 	// 构造函数
 	BinaryTree(const string &s);				
-	//拷贝构造函数
+    // 拷贝构造函数
 	//BinaryTree(BinaryTree<T> &tree);
-	//析构函数
+	// 析构函数
 	~BinaryTree();
-	//外部删除二叉树函数
+	// 外部删除二叉树函数
 	bool pubForDelBTree();		
-	//外部访问先序遍历
+	// 外部访问先序遍历
 	void pubForPreOrder();
-	//外部访问中序遍历
+	// 外部访问中序遍历
 	void pubForInOrder();
-	//外部访问后序遍历
+	// 外部访问后序遍历
 	void pubForPostOrder();
-	//外部访问层次遍历
+	// 外部访问层次遍历
 	void pubForLayerOrder();
-	//外部查找值为et_value的二叉树结点
+	// 外部查找值为et_value的二叉树结点
 	void pubForFindNode(T et_value);
-	//获得二叉树的根
+	// 获得二叉树的根
 	TreeNode<T>* getRoot();
-	//外部获得二叉树的深度
+	// 外部获得二叉树的深度
 	int pubForGetBTDepth();
 
 private:
 	TreeNode<T> *root;                  //二叉树的根指针
-	
+    
+    
 	//构建二叉树
 	TreeNode<T>* createBTree(const string &s, int &i);
 	//销毁二叉树
@@ -113,7 +114,29 @@ TreeNode<T>* BinaryTree<T>::createBTree(const string &s, int &i){
 		return BTree;
 	}
 }
-		
+
+//根据前序遍历序列和中序遍历序列构建二叉树
+//失败，模板类惹的祸，只允许TreeNode<char>,待另写一个cpp实现
+/*template<typename T>
+TreeNode<T>* createBTreeByPreAndInOrder(string &PreOrder, string &InOrder){
+    if(PreOrder.empty() || InOrder.empty()) return NULL;
+    TreeNode<T> *tmp; 
+    if(PreOrder.size()){
+        tmp = new TreeNode<T>();
+        tmp->data = PreOrder[0];
+        int idx = InOrder.find(PreOrder[0]);
+        
+        string PreLeft = PreOrder.substr(1, idx);
+        string PreRight = PreOrder.substr(idx + 1);
+        string InLeft = InOrder.substr(0, idx);
+        string InRight = InOrder.substr(idx + 1);
+
+        tmp->l_child = createBTreeByPreAndInOrder(PreLeft, InLeft);
+        tmp->r_child = createBTreeByPreAndInOrder(PreRight,InRight);
+    }
+    return tmp;
+}*/
+
 //// 拷贝构造函数
 //template <typename T>
 //BinaryTree<T>::BinaryTree(BinaryTree<T> &tree){
@@ -234,6 +257,7 @@ int BinaryTree<T>::getBTDepth(TreeNode<T> *p){
 		int l_child_depth = getBTDepth(p->l_child);
 		int r_child_depth = getBTDepth(p->r_child);
 		depth =  (l_child_depth >= r_child_depth) ? (l_child_depth + 1) : (r_child_depth + 1);
+        //depth = 1 + (l_child_depth >= r_child_depth ? l_child_depth : r_child_depth);
 	}
 	return depth;	
 }
