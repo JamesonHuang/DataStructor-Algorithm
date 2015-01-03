@@ -38,21 +38,31 @@ void testBinaryTree()
 	string s = "124###35#6###";
     BinaryTree<string> *bt = new BinaryTree<string>(s);
     cout << "构建二叉树ing..." << endl;
-	cout << "二叉树前序遍历：";
+
+	cout << "二叉树前序遍历(递  归)：";
 	bt->pubForPreOrder();
 	cout << endl;
-	cout << "二叉树中序遍历：";
+	
+    cout << "二叉树中序遍历(递  归)：";
 	bt->pubForInOrder();
 	cout << endl;
-	cout << "二叉树后序遍历：";
-	bt->pubForPostOrder();
+	
+    cout << "二叉树后序遍历(递  归)：";
+	bt->pubForPostOrder(1);
 	cout << endl;
-	cout << "二叉树层次遍历：";
+
+    cout << "二叉树后序遍历(栈实现)：";
+    bt->pubForPostOrder(2);
+    cout << endl;
+
+	cout << "二叉树层次遍历(队实现)：";
 	bt->pubForLayerOrder();
 	cout << endl;
 	bt->pubForFindNode("4");
-	cout << "二叉树深度为：" << bt->pubForGetBTDepth() << endl;
-	cout << "销毁二叉树是否成功：" << bt->pubForDelBTree() << endl;
+	
+    cout << "二叉树深度为：" << bt->pubForGetBTDepth() << endl;
+	
+    cout << "销毁二叉树是否成功：" << bt->pubForDelBTree() << endl;
 
 }
 

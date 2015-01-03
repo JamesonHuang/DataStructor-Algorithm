@@ -13,6 +13,7 @@
 #include <iostream>
 #include <string>
 //#include <deque>
+#include<stack>
 #include<queue>
 using namespace std;
 
@@ -181,11 +182,27 @@ void BinaryTree<T>::pubForPostOrder(){
 //内部访问后序遍历
 template<typename T>
 void BinaryTree<T>::PostOrder(TreeNode<T> *p){
-	if(p != NULL){
-		PostOrder(p->l_child);
-		PostOrder(p->r_child);
-		cout << p->data << "\t";
-	}
+    /*stack<TreeNode<T> > QForBTree;
+    TreeNode<T> pre = NULL;
+    while(p != NULL || (!QForBTree.empty()) ){
+        if(p != NULL){
+            QForBTree.push(p);
+            p = p->l_child;
+        }
+        else{
+            p = QForBTree.top();
+            if(p->right != NULL && p->right != pre ){
+                QForBTree.push(p);
+                p = p->r_child;
+            }
+            else{
+                cout << p->data << "\t";
+                pre = p;
+                QForBTree.pop();
+            }
+        }
+    }
+    */
 }
 
 //外部查找值为et_value的二叉树结点

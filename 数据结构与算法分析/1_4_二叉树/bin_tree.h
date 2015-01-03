@@ -17,6 +17,7 @@
 #include <string>
 //#include <deque>
 #include<queue>
+#include<stack>
 using namespace std;
 
 //二叉树类声明
@@ -56,7 +57,7 @@ public:
 	// 外部访问中序遍历
 	void pubForInOrder();
 	// 外部访问后序遍历
-	void pubForPostOrder();
+	void pubForPostOrder(int method);
 	// 外部访问层次遍历
 	void pubForLayerOrder();
 	// 外部查找值为et_value的二叉树结点
@@ -79,7 +80,7 @@ private:
 	//内部中序遍历
 	void InOrder(TreeNode<T>* p);
 	//内部后序遍历
-	void PostOrder(TreeNode<T>* p);
+	void PostOrder(TreeNode<T>* p, int method);
 	//内部层次遍历
     void LayerOrder(TreeNode<T> *p);  
 	//内部查找值为et_value的二叉树结点
@@ -201,17 +202,46 @@ void BinaryTree<T>::InOrder(TreeNode<T>* p){
 
 //外部访问后序遍历
 template<typename T>
-void BinaryTree<T>::pubForPostOrder(){
-	PostOrder(root);
+void BinaryTree<T>::pubForPostOrder(int method){
+	PostOrder(root, method);
 }
 //内部访问后序遍历
 template<typename T>
-void BinaryTree<T>::PostOrder(TreeNode<T> *p){
-	if(p != NULL){
-		PostOrder(p->l_child);
-		PostOrder(p->r_child);
-		cout << p->data << "\t";
-	}
+void BinaryTree<T>::PostOrder(TreeNode<T> *p, int method){
+    if(!p){
+        cout << "空二叉树！" << endl;
+    }
+    switch(method){
+        case 1:     //递归形式实现
+            if(p != NULL){
+                PostOrder(p->l_child, method);
+                PostOrder(p->r_child, method);
+                cout << p->data << "\t";
+            }
+            break;
+
+        case 2:     //栈形式实现
+            stack<TreeNode<T>* > QForBTree;
+            TreeNode<T> *pre = NULL, *top = NULL;
+            while(p != NULL || (!QForBTree.empty()) ){
+                if(p != NULL){
+                    QForBTree.push(p);
+                    p = p->l_child;
+                }
+                else{
+                    top = QForBTree.top();
+                    if(top->r_child != NULL && top->r_child != pre ){
+                        p = top->r_child;
+                    }
+                    else{
+                        cout << top->data << "\t";
+                        pre = top;
+                        QForBTree.pop();
+                    }
+                }
+            }
+            break;
+    }
 }
 
 //外部查找值为et_value的二叉树结点
