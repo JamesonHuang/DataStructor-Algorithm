@@ -1,14 +1,61 @@
-﻿/*********************************************************************
+﻿/*******************************************************************************
 	@ Title:			实现二叉树基本操作	
 
 	@ Description:		
-                        1.C++实现二叉树模板类（递归形式）					
+                        1.C++实现二叉树模板类（递归形式）
+                        2.C++实现二叉树模板类（非递归形式）					
 	@ Conclusion:			
+						1.构建二叉树（递归）：
+							A.判断传入字符串参数是否为空
+							B.遇“#”返回NULL
+							C.遇其他字符，new一个二叉树结点
+								a.data域是该字符
+								b.左孩子递归调用该函数，所传标志变量i加1
+								c.右孩子同b
 						
+						2.先序遍历（非递归）：
+							策略一：
+								A.向左深搜直至BTree的最左叶子节点的l_child指针
+								B.搜的同时，访问每一结点，并将结点入栈
+								C.逐一获取栈中结点的右孩子，重复A，B
+								D.每获取一个栈中结点，就将该结点弹出，直至栈空
+							
+							策略二：
+								A.将根节点入栈
+								B.访问栈顶结点，并弹出栈顶结点
+								C.将该栈顶结点的右孩子入栈,如果有的话
+								D.将该栈顶结点的左孩子入栈,如果有的话
+								E.重复BCD,直至栈空
+
+						3.中序遍历（非递归）
+							策略一：
+								A.向左深搜直至BTree的最左叶子节点的l_child指针
+								B.搜的同时，将结点入栈
+								C.逐一访问栈顶结点，并将栈顶结点的右孩子入栈
+								D.重复ABC，直至栈空
+
+						4.后序遍历（非递归）
+							策略一：
+								A.向左深搜直至BTree的最左叶子节点的l_child指针
+								B.搜的同时，将结点入栈
+								C.向右深搜栈顶元素的右孩子，直至最右叶子节点，
+									*、每搜一个节点时，先重复AB
+								D.将栈中元素逐个弹出，并访问之
+							
+							策略二：双栈法
+								A.构建两个栈s1,s2
+								B.将根节点入栈s1
+								C.弹出s1的栈顶元素，并将该元素入栈s2
+								D.将该元素的左孩子入栈，如果有的话
+								E.将该元素的右孩子入栈，如果有的话
+								F.重复CDE,直至栈s1空
+								G.通过栈顶指针逐一遍历栈s2的元素
+
+
 	@ Author:		rh_Jameson
 
 	@ Date:			2014/12/22
-**********************************************************************/
+**********************************************************************************/
 
 #ifndef BINARYTREE_H
 #define BINARYTREE_H
@@ -53,9 +100,9 @@ public:
 	// 外部删除二叉树函数
 	bool pubForDelBTree();		
 	// 外部访问先序遍历
-	void pubForPreOrder();
+	void pubForPreOrder(int method);
 	// 外部访问中序遍历
-	void pubForInOrder();
+	void pubForInOrder(int method);
 	// 外部访问后序遍历
 	void pubForPostOrder(int method);
 	// 外部访问层次遍历
@@ -76,9 +123,9 @@ private:
 	//销毁二叉树
 	void delBTree(TreeNode<T>* &p);
 	//内部先序遍历
-	void PreOrder(TreeNode<T>* p);
+	void PreOrder(TreeNode<T>* p, int method);
 	//内部中序遍历
-	void InOrder(TreeNode<T>* p);
+	void InOrder(TreeNode<T>* p, int method);
 	//内部后序遍历
 	void PostOrder(TreeNode<T>* p, int method);
 	//内部层次遍历
@@ -172,32 +219,93 @@ void BinaryTree<T>::delBTree(TreeNode<T>* &p){
 
 //外部访问先序遍历
 template<typename T>
-void BinaryTree<T>::pubForPreOrder(){
-	PreOrder(root);
+void BinaryTree<T>::pubForPreOrder(int method){
+	PreOrder(root, method);
 }
 //内部访问先序遍历
 template<typename T>
-void BinaryTree<T>::PreOrder(TreeNode<T>* p){
-	if(p != NULL){
-		cout << p->data << "\t";
-		PreOrder(p->l_child);
-		PreOrder(p->r_child);
+void BinaryTree<T>::PreOrder(TreeNode<T>* p, int method){
+	if(!p){
+		cout << "空二叉树！" << endl;
 	}
+	switch(method){
+		case 1:		//递归形式
+			if(p != NULL){
+				cout << p->data << "\t";
+				PreOrder(p->l_child);
+				PreOrder(p->r_child);
+			}
+			break;
+		case 2:		//栈的实现形式
+			stack<TreeNode<T> *> SForBTree;
+			while(p != NULL || !SForBTree.empty() ){
+				if(p != NULL){
+					cout << p->data << "\t";
+					SForBTree.push(p);
+					p = p->l_child;
+				}
+				else{
+					p = SForBTree->top();
+					SForBTree.pop();
+					p = p->r_child;
+				}
+			}
+		case 3:		//栈实现形式二
+			stack<TreeNode<T> *> SForBTree;
+			SForBTree.push(p);
+			TreeNode<T> *tmp;
+			while( !SForBTree.empty() ){
+				tmp = SForBTree.top();
+				cout << tmp->data << "\t";
+				SForBTree.pop();
+
+				if(tmp->r_child){
+					SForBTree.push(tmp->r_child);
+				}
+				if(tmp->l_child){
+					SForBTree.push(tmp->l_child);
+				}
+			}
+	}
+
 }
 
 //外部访问中序遍历
 template<typename T>
-void BinaryTree<T>::pubForInOrder(){
-	InOrder(root);
+void BinaryTree<T>::pubForInOrder(int method){
+	InOrder(root, method);
 }
 //内部访问中序遍历
 template<typename T>
-void BinaryTree<T>::InOrder(TreeNode<T>* p){
-	if(p != NULL){
-		InOrder(p->l_child);
-		cout << p->data << "\t";				
-		InOrder(p->r_child);
+void BinaryTree<T>::InOrder(TreeNode<T>* p, int method){
+	if(!p){
+		cout << "空二叉树" << endl;
 	}
+	switch(method){
+		case 1:		//递归形式
+			if(p != NULL){
+				InOrder(p->l_child);
+				cout << p->data << "\t";				
+				InOrder(p->r_child);
+			}
+			break;
+		case 2:		//栈的实现形式
+			stack<TreeNode<T> *> SForBTree;
+			while(p != NULL || !SForBTree.empty() ){
+				if(p != NULL){
+					SForBTree.push(p);
+					p = p->l_child;
+				}
+				else{
+					p = SForBTree.top();
+					cout << p->data << "\t";
+					SForBTree.pop();
+					p = p->r_child;
+				}
+			}
+			break;
+	}
+	
 }
 
 //外部访问后序遍历
@@ -221,26 +329,49 @@ void BinaryTree<T>::PostOrder(TreeNode<T> *p, int method){
             break;
 
         case 2:     //栈形式实现
-            stack<TreeNode<T>* > QForBTree;
+            stack<TreeNode<T>* > SForBTree;
             TreeNode<T> *pre = NULL, *top = NULL;
-            while(p != NULL || (!QForBTree.empty()) ){
+            while(p != NULL || (!SForBTree.empty()) ){
                 if(p != NULL){
-                    QForBTree.push(p);
+                    SForBTree.push(p);
                     p = p->l_child;
                 }
                 else{
-                    top = QForBTree.top();
+                    top = SForBTree.top();
                     if(top->r_child != NULL && top->r_child != pre ){
                         p = top->r_child;
                     }
                     else{
                         cout << top->data << "\t";
                         pre = top;
-                        QForBTree.pop();
+                        SForBTree.pop();
                     }
                 }
             }
             break;
+        case 3:		//双栈形式实现
+        	stack<TreeNode<T> *> s1, s2;
+        	TreeNode<T> *tmp;
+        	s1.push(p);
+        	while(!s1.empty()){
+        		tmp = s1.top();
+        		s1.pop();
+        		s2.push(tmp);
+
+        		if(tmp->l_child){
+        			s1.push(tmp->l_child);
+        		}
+        		if(tmp->r_child){
+        			s1.push(tmp->r_child);
+        		}
+        	}
+        	while(!s2.empty()){
+        		tmp = s2.top();
+        		cout << tmp->data << "\t";
+        		s2.pop();
+        	}
+        	break;
+
     }
 }
 
