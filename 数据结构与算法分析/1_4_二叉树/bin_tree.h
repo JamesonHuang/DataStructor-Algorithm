@@ -271,7 +271,8 @@ void  BinaryTree<T>::pubForLayerOrder(){
 template<typename T>
 void  BinaryTree<T>::LayerOrder(TreeNode<T> *p){
 	if(p == NULL){
-		return;
+        cout << "空树！" << endl;
+        return;
 	}
 	queue<TreeNode<T> *> queueTreeNode;
 	queueTreeNode.push(p);
