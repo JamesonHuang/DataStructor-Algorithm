@@ -41,6 +41,7 @@
 								C.向右深搜栈顶元素的右孩子，直至最右叶子节点，
 									*、每搜一个节点时，先重复AB
 								D.将栈中元素逐个弹出，并访问之
+                                E.执行D时，需注意将p指针置空
 							
 							策略二：双栈法
 								A.构建两个栈s1,s2
@@ -146,7 +147,8 @@ BinaryTree<T>::BinaryTree(const string &s){
 //构建二叉树	
 template <typename T>
 TreeNode<T>* BinaryTree<T>::createBTree(const string &s, int &i){
-	TreeNode<T>* BTree; 
+	//递归构建
+    /*TreeNode<T>* BTree; 
 	if(s.empty() ){
 		return NULL;
 	}
@@ -160,7 +162,46 @@ TreeNode<T>* BinaryTree<T>::createBTree(const string &s, int &i){
 		BTree->l_child = createBTree(s,++i);
 		BTree->r_child = createBTree(s,++i);
 		return BTree;
-	}
+	}*/
+
+    //栈的实现形式
+    if(s.empty()){
+        return NULL;
+    }
+    TreeNode<T>* BTNode = new TreeNode<t>;
+    BTNode->data = s[i++];
+    stack<TreeNode<T>* > SForBTree;
+    while(BTNode || !SForBTree.empty() ){
+        if(BTNode){
+            SForBTree.push(BTNode);
+            BTNode = BTNode->l_child;
+        }
+        else{
+            BTNode = SForBTree.top();
+            SForBTree.pop();
+            BTNode = BTNode->r_child;
+        }
+    }
+		/*case 3:		//栈实现形式二
+            {   
+                stack<TreeNode<T>* > SForBTree;
+                SForBTree.push(p);
+                TreeNode<T> *tmp;
+                while( !SForBTree.empty() ){
+                    tmp = SForBTree.top();
+                    cout << tmp->data << "\t";
+                    SForBTree.pop();
+
+                    if(tmp->r_child){
+                        SForBTree.push(tmp->r_child);
+                    }
+                    if(tmp->l_child){
+                        SForBTree.push(tmp->l_child);
+                    }
+                }
+                break;
+        	}
+            */
 }
 
 //根据前序遍历序列和中序遍历序列构建二叉树
@@ -220,77 +261,82 @@ void BinaryTree<T>::delBTree(TreeNode<T>* &p){
 //外部访问先序遍历
 template<typename T>
 void BinaryTree<T>::pubForPreOrder(int method){
+	if(!root){
+		cout << "空二叉树！" << endl;
+	}
 	PreOrder(root, method);
 }
 //内部访问先序遍历
 template<typename T>
 void BinaryTree<T>::PreOrder(TreeNode<T>* p, int method){
-	if(!p){
-		cout << "空二叉树！" << endl;
-	}
 	switch(method){
 		case 1:		//递归形式
 			if(p != NULL){
 				cout << p->data << "\t";
-				PreOrder(p->l_child);
-				PreOrder(p->r_child);
+				PreOrder(p->l_child, method);
+				PreOrder(p->r_child, method);
 			}
 			break;
 		case 2:		//栈的实现形式
-			stack<TreeNode<T> *> SForBTree;
-			while(p != NULL || !SForBTree.empty() ){
-				if(p != NULL){
-					cout << p->data << "\t";
-					SForBTree.push(p);
-					p = p->l_child;
-				}
-				else{
-					p = SForBTree->top();
-					SForBTree.pop();
-					p = p->r_child;
-				}
-			}
+		    {	
+                stack<TreeNode<T>* > SForBTree;
+                while(p != NULL || !SForBTree.empty() ){
+                    if(p != NULL){
+                        cout << p->data << "\t";
+                        SForBTree.push(p);
+                        p = p->l_child;
+                    }
+                    else{
+                        p = SForBTree.top();
+                        SForBTree.pop();
+                        p = p->r_child;
+                    }
+                }
+                break;
+            }
 		case 3:		//栈实现形式二
-			stack<TreeNode<T> *> SForBTree;
-			SForBTree.push(p);
-			TreeNode<T> *tmp;
-			while( !SForBTree.empty() ){
-				tmp = SForBTree.top();
-				cout << tmp->data << "\t";
-				SForBTree.pop();
+            {   
+                stack<TreeNode<T>* > SForBTree;
+                SForBTree.push(p);
+                TreeNode<T> *tmp;
+                while( !SForBTree.empty() ){
+                    tmp = SForBTree.top();
+                    cout << tmp->data << "\t";
+                    SForBTree.pop();
 
-				if(tmp->r_child){
-					SForBTree.push(tmp->r_child);
-				}
-				if(tmp->l_child){
-					SForBTree.push(tmp->l_child);
-				}
-			}
-	}
-
+                    if(tmp->r_child){
+                        SForBTree.push(tmp->r_child);
+                    }
+                    if(tmp->l_child){
+                        SForBTree.push(tmp->l_child);
+                    }
+                }
+                break;
+        	}
+    }
 }
 
 //外部访问中序遍历
 template<typename T>
 void BinaryTree<T>::pubForInOrder(int method){
+	if(!root){
+		cout << "空二叉树" << endl;
+	}
 	InOrder(root, method);
 }
 //内部访问中序遍历
 template<typename T>
 void BinaryTree<T>::InOrder(TreeNode<T>* p, int method){
-	if(!p){
-		cout << "空二叉树" << endl;
-	}
 	switch(method){
 		case 1:		//递归形式
 			if(p != NULL){
-				InOrder(p->l_child);
+				InOrder(p->l_child, method);
 				cout << p->data << "\t";				
-				InOrder(p->r_child);
+				InOrder(p->r_child, method);
 			}
 			break;
 		case 2:		//栈的实现形式
-			stack<TreeNode<T> *> SForBTree;
+			stack<TreeNode<T>* > SForBTree;
 			while(p != NULL || !SForBTree.empty() ){
 				if(p != NULL){
 					SForBTree.push(p);
@@ -311,14 +357,14 @@ void BinaryTree<T>::InOrder(TreeNode<T>* p, int method){
 //外部访问后序遍历
 template<typename T>
 void BinaryTree<T>::pubForPostOrder(int method){
-	PostOrder(root, method);
+    if(!root){
+        cout << "空二叉树！" << endl;
+    }
+    PostOrder(root, method);
 }
 //内部访问后序遍历
 template<typename T>
 void BinaryTree<T>::PostOrder(TreeNode<T> *p, int method){
-    if(!p){
-        cout << "空二叉树！" << endl;
-    }
     switch(method){
         case 1:     //递归形式实现
             if(p != NULL){
@@ -328,50 +374,55 @@ void BinaryTree<T>::PostOrder(TreeNode<T> *p, int method){
             }
             break;
 
-        case 2:     //栈形式实现
+        case 2:     //栈形式实现，该代码应该可以转作非递归销毁二叉树
+        {
             stack<TreeNode<T>* > SForBTree;
-            TreeNode<T> *pre = NULL, *top = NULL;
-            while(p != NULL || (!SForBTree.empty()) ){
-                if(p != NULL){
+            TreeNode<T> *pre;
+            while(p || !SForBTree.empty() ){
+                if(p){
                     SForBTree.push(p);
                     p = p->l_child;
                 }
                 else{
-                    top = SForBTree.top();
-                    if(top->r_child != NULL && top->r_child != pre ){
-                        p = top->r_child;
+                    p = SForBTree.top();
+                    if(p->r_child && p->r_child != pre ){
+                        p = p->r_child;
                     }
                     else{
-                        cout << top->data << "\t";
-                        pre = top;
+                        cout << p->data << "\t";
+                        pre = p;
                         SForBTree.pop();
+                        p = NULL;           //!!!须置空，否则陷入死循环
+                                            //反复出栈 / 入栈
                     }
                 }
             }
             break;
+        }
         case 3:		//双栈形式实现
-        	stack<TreeNode<T> *> s1, s2;
-        	TreeNode<T> *tmp;
-        	s1.push(p);
-        	while(!s1.empty()){
-        		tmp = s1.top();
-        		s1.pop();
-        		s2.push(tmp);
+        {
+            stack<TreeNode<T>* > s1, s2;
+            TreeNode<T> *tmp;
+            s1.push(p);
+            while(!s1.empty()){
+                tmp = s1.top();
+                s1.pop();
+                s2.push(tmp);
 
-        		if(tmp->l_child){
-        			s1.push(tmp->l_child);
-        		}
-        		if(tmp->r_child){
-        			s1.push(tmp->r_child);
-        		}
-        	}
-        	while(!s2.empty()){
-        		tmp = s2.top();
-        		cout << tmp->data << "\t";
-        		s2.pop();
-        	}
-        	break;
-
+                if(tmp->l_child){
+                    s1.push(tmp->l_child);
+                }
+                if(tmp->r_child){
+                    s1.push(tmp->r_child);
+                }
+            }
+            while(!s2.empty()){
+                tmp = s2.top();
+                cout << tmp->data << "\t";
+                s2.pop();
+            }
+            break;
+        }
     }
 }
 
