@@ -35,8 +35,14 @@ using namespace std;
 //---------------------1、测试二叉树的ADT（递归）----------------------//
 void testBinaryTree()
 {
-	string s = "124###35#6###";
-    BinaryTree<string> *bt = new BinaryTree<string>(s);
+	//string s = "124###35#6###";         //先序遍历序列构建
+	//string s = "12#47###3589####6##";         //先序遍历序列构建
+    //string s = "12#46###3#5##";
+    //BinaryTree<string> *bt = new BinaryTree<string>(s, 2);
+	
+
+    string s = "##4#2###65#31";             //后序遍历序列构建
+    BinaryTree<string> *bt = new BinaryTree<string>(s, 3);
     cout << "构建二叉树ing..." << endl;
 
 	cout << "二叉树前序遍历(递  归)：";

@@ -52,6 +52,18 @@
 								F.重复CDE,直至栈s1空
 								G.通过栈顶指针逐一遍历栈s2的元素
 
+                        5.根据先序遍历序列构建二叉树（非递归）：
+                            策略：
+                                A.判空
+                                B.向左深搜构造，并将结点入栈
+                                C.重复执行B直至最左叶子节点的左指针
+                                D.逐一访问栈顶结点，向右深搜构造
+                                E.执行D时，检测是否有左结点，有则执行C
+
+                        6.根据后序遍历序列构建二叉树（非递归）：
+                            策略：
+                                A.同5类似，顺序颠倒一下就可以了
+
 
 	@ Author:		rh_Jameson
 
@@ -93,7 +105,7 @@ template<typename T>
 class BinaryTree{
 public:
 	// 构造函数
-	BinaryTree(const string &s);				
+	BinaryTree(const string &s, int method);				
     // 拷贝构造函数
 	//BinaryTree(BinaryTree<T> &tree);
 	// 析构函数
@@ -120,7 +132,7 @@ private:
     
     
 	//构建二叉树
-	TreeNode<T>* createBTree(const string &s, int &i);
+	TreeNode<T>* createBTree(const string &s, int &i, int method);
 	//销毁二叉树
 	void delBTree(TreeNode<T>* &p);
 	//内部先序遍历
@@ -139,69 +151,113 @@ private:
 
 // 构造函数
 template <typename T>
-BinaryTree<T>::BinaryTree(const string &s){
+BinaryTree<T>::BinaryTree(const string &s, int method){
 	root = NULL;
 	int i = 0;
-	root = createBTree(s, i);
+	root = createBTree(s, i, method);
 } 
 //构建二叉树	
 template <typename T>
-TreeNode<T>* BinaryTree<T>::createBTree(const string &s, int &i){
-	//递归构建
-    /*TreeNode<T>* BTree; 
-	if(s.empty() ){
-		return NULL;
-	}
+TreeNode<T>* BinaryTree<T>::createBTree(const string &s, int &i,int method){
+    switch(method){
+        case 1:     //递归构建
+        {
+            TreeNode<T>* BTree; 
+            if(s.empty() ){
+                return NULL;
+            }
 
-	if(s[i] == '#'){
-		return NULL;
-	}
-	else{
-		BTree = new TreeNode<T>();
-		BTree->data = s[i];
-		BTree->l_child = createBTree(s,++i);
-		BTree->r_child = createBTree(s,++i);
-		return BTree;
-	}*/
-
-    //栈的实现形式
-    if(s.empty()){
-        return NULL;
-    }
-    TreeNode<T>* BTNode = new TreeNode<t>;
-    BTNode->data = s[i++];
-    stack<TreeNode<T>* > SForBTree;
-    while(BTNode || !SForBTree.empty() ){
-        if(BTNode){
-            SForBTree.push(BTNode);
-            BTNode = BTNode->l_child;
+            if(s[i] == '#'){
+                return NULL;
+            }
+            else{
+                BTree = new TreeNode<T>();
+                BTree->data = s[i];
+                BTree->l_child = createBTree(s,++i, method);
+                BTree->r_child = createBTree(s,++i, method);
+                return BTree;
+            }
         }
-        else{
-            BTNode = SForBTree.top();
-            SForBTree.pop();
-            BTNode = BTNode->r_child;
-        }
-    }
-		/*case 3:		//栈实现形式二
-            {   
-                stack<TreeNode<T>* > SForBTree;
-                SForBTree.push(p);
-                TreeNode<T> *tmp;
-                while( !SForBTree.empty() ){
-                    tmp = SForBTree.top();
-                    cout << tmp->data << "\t";
-                    SForBTree.pop();
-
-                    if(tmp->r_child){
-                        SForBTree.push(tmp->r_child);
-                    }
-                    if(tmp->l_child){
-                        SForBTree.push(tmp->l_child);
-                    }
+        case 2:     //根据先序遍历序列构建（非递归）
+        {
+            if(s.empty()){
+                return NULL;
+            }
+            TreeNode<T> *BTNode = new TreeNode<T>, *head = BTNode;
+            BTNode->data = s[i++];
+            stack<TreeNode<T>* > SForBTree;
+            while(BTNode || !SForBTree.empty() ){
+                if(s[i] == '\0'){
+                    break;
                 }
-                break;
-        	}
-            */
+                if(BTNode){
+                    SForBTree.push(BTNode);
+                    if(s[i] == '#'){
+                        BTNode->l_child = NULL;
+                    }
+                    else{
+                        BTNode->l_child = new TreeNode<T>();
+                        BTNode->l_child->data = s[i];
+                    }
+                    BTNode = BTNode->l_child;
+                }
+                else{
+                    BTNode = SForBTree.top();
+                    SForBTree.pop();
+                    if(s[i] == '#'){
+                        BTNode->r_child = NULL;
+                    }
+                    else{
+                        BTNode->r_child = new TreeNode<T>();
+                        BTNode->r_child->data = s[i];
+                    }
+                    BTNode = BTNode->r_child;
+                }
+                i++;
+            }
+            return head;
+        }
+        case 3:     //根据后序遍历序列构建二叉树
+        {
+            if(s.empty()){
+                return NULL;
+            }
+            int cur = s.size() - 1;
+            stack<TreeNode<T>* > SForBTree;
+            TreeNode<T> *node = new TreeNode<T>(), *head = node;
+            node->data = s[cur--];
+            while(node || !SForBTree.empty()){
+                if(cur < 0){
+                    break;
+                }
+                if(node){
+                    SForBTree.push(node);
+                    if(s[cur] == '#'){
+                        node->r_child = NULL;
+                    }
+                    else{
+                        node->r_child = new TreeNode<T>();
+                        node->r_child->data = s[cur];
+                    }
+                    node = node->r_child;
+                }
+                else{
+                    node = SForBTree.top();
+                    SForBTree.pop();
+                    if(s[cur] == '#'){
+                        node->l_child = NULL;
+                    }
+                    else{
+                        node->l_child = new TreeNode<T>();
+                        node->l_child->data = s[cur];
+                    }
+                    node = node->l_child;
+                }
+                --cur;
+            }
+            return head;
+        }
+    }
 }
 
 //根据前序遍历序列和中序遍历序列构建二叉树
@@ -250,12 +306,36 @@ bool BinaryTree<T>::pubForDelBTree(){
 //内部销毁二叉树
 template<typename T>
 void BinaryTree<T>::delBTree(TreeNode<T>* &p){
-	if(p != NULL){
+	
+    /* 递归销毁
+     if(p != NULL){
 		delBTree(p->l_child);
 		delBTree(p->r_child);
 		delete(p);
 		p = NULL;
-	}
+	}*/
+
+    stack<TreeNode<T>* > SForBTree;
+    TreeNode<T> *pre;
+    while(p || !SForBTree.empty() ){
+        if(p){
+            SForBTree.push(p);
+            p = p->l_child;
+        }
+        else{
+            p = SForBTree.top();
+            if(p->r_child && p->r_child != pre ){   //有右子树且右子树未被访问过
+                p = p->r_child;
+            }
+            else{
+                pre = p;
+                SForBTree.pop();
+                delete p;
+                p = NULL;           //!!!须置空，否则陷入死循环
+                                    //反复出栈 / 入栈
+            }
+        }
+    }
 }
 
 //外部访问先序遍历
@@ -385,7 +465,7 @@ void BinaryTree<T>::PostOrder(TreeNode<T> *p, int method){
                 }
                 else{
                     p = SForBTree.top();
-                    if(p->r_child && p->r_child != pre ){
+                    if(p->r_child && p->r_child != pre ){   //有右子树且右子树未被访问过
                         p = p->r_child;
                     }
                     else{
