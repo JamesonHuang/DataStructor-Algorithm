@@ -314,7 +314,7 @@ void BinaryTree<T>::delBTree(TreeNode<T>* &p){
 		delete(p);
 		p = NULL;
 	}*/
-
+	//非递归实现
     stack<TreeNode<T>* > SForBTree;
     TreeNode<T> *pre;
     while(p || !SForBTree.empty() ){
@@ -393,6 +393,31 @@ void BinaryTree<T>::PreOrder(TreeNode<T>* p, int method){
                 }
                 break;
         	}
+        case 4:		//Morris遍历
+        {
+        	TreeNode<T> *cur = p, *pre;
+        	while(cur){
+        		if(!cur->l_child){
+        			cout << cur->data << "\t";
+        			cur = cur->r_child;
+        		}
+        		else{
+        			pre = cur->l_child;
+        			while(pre->r_child != NULL && pre->r_child != cur){
+        				pre = pre->r_child;
+        			}
+        			if(pre->r_child == NULL){
+        				pre->r_child = cur;
+        				cout << cur->data << "\t";
+        				cur = cur->l_child;
+        			}
+        			else{
+        				pre->r_child = NULL;
+        				cur = cur->r_child;
+        			}
+        		}
+        	}
+        }
     }
 }
 
@@ -409,13 +434,15 @@ template<typename T>
 void BinaryTree<T>::InOrder(TreeNode<T>* p, int method){
 	switch(method){
 		case 1:		//递归形式
-			if(p != NULL){
+		{	if(p != NULL){
 				InOrder(p->l_child, method);
 				cout << p->data << "\t";				
 				InOrder(p->r_child, method);
 			}
 			break;
+		}
 		case 2:		//栈的实现形式
+		{
 			stack<TreeNode<T>* > SForBTree;
 			while(p != NULL || !SForBTree.empty() ){
 				if(p != NULL){
@@ -430,6 +457,32 @@ void BinaryTree<T>::InOrder(TreeNode<T>* p, int method){
 				}
 			}
 			break;
+		}
+		case 3:		//morris遍历
+		{
+			TreeNode<T> *cur = p, *pre;
+			while(cur){
+				if(cur->l_child == NULL){
+					cout << cur->data << "\t";
+					cur = cur->r_child;
+				}
+				else{
+					pre = cur->l_child;
+					while(pre->r_child != NULL && pre->r_child != cur){
+						pre = pre->r_child;
+					}
+					if(pre->r_child == NULL){
+						pre->r_child = cur;
+						cur = cur->l_child;
+					}
+					else{
+						pre->r_child = NULL;
+						cout << cur->data << "\t";
+						cur = cur->r_child;
+					}
+				}
+			}
+		}
 	}
 	
 }
