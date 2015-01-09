@@ -1,4 +1,4 @@
-﻿/*******************************************************************************
+/*******************************************************************************
 	@ Title:			实现二叉树基本操作	
 
 	@ Description:		
@@ -104,6 +104,9 @@ public:
 template<typename T>
 class BinaryTree{
 public:
+	
+	/* 二叉树常用操作 */
+
 	// 构造函数
 	BinaryTree(const string &s, int method);				
     // 拷贝构造函数
@@ -127,10 +130,24 @@ public:
 	// 外部获得二叉树的深度
 	int pubForGetBTDepth();
 
+	/* 二叉排序树常用操作 */
+
+	// 外部插入新结点
+	void insertNode(T et_value);
+	// 外部删除指定结点
+	void removeNode(T et_value);
+	// 外部查找最大值
+	void findMax();
+	// 外部查找最小值
+	void findMin();
+	// 外部查找二叉树是否包含指定值的结点
+	bool contains(T et_value);
+
 private:
 	TreeNode<T> *root;                  //二叉树的根指针
     
-    
+    /* 二叉树常用操作 */
+
 	//构建二叉树
 	TreeNode<T>* createBTree(const string &s, int &i, int method);
 	//销毁二叉树
@@ -147,6 +164,19 @@ private:
 	TreeNode<T>* findNode(TreeNode<T> *p, T et_value);    
 	//内部获得二叉树的深度
 	int getBTDepth(TreeNode<T> *p);
+
+	/* 二叉排序树常用操作 */
+
+	// 插入新结点
+	void insertNode(T et_value, TreeNode<T> *p);
+	// 删除指定结点
+	void removeNode(T et_value, TreeNode<T> *p);
+	// 查找最大值
+	void findMax(TreeNode<T> *p);
+	// 查找最小值
+	void findMin(TreeNode<T> *p);
+	// 查找二叉树是否包含指定值的结点
+	bool contains(T et_value, TreeNode<T> *p);
 };
 
 // 构造函数
@@ -556,8 +586,52 @@ void BinaryTree<T>::PostOrder(TreeNode<T> *p, int method){
             }
             break;
         }
+        case 4:		//morris遍历
+        {
+        	TreeNode<T> cur = p, pre;
+        	while(cur != NULL){
+        		if(cur->l_child == NULL){
+        			cur = cur->r_child;
+        		}
+        		else{
+        			pre = cur->l_child;
+        			while(pre->r_child != NULL && pre->r_child != cur){
+        				pre = pre->r_child;
+        			}
+        			if(pre->r_child == NULL){
+        				pre->r_child = cur;
+        				cur = cur->l_child;
+        			}
+        			else{
+        				//printReverse(cur->l_child, pre);
+        				pre->r_child = NULL;
+        				cur = cur->r_child;
+        			}
+        		}
+        	}
+        }
     }
 }
+/*template<typename T>
+void reverse(TreeNode<T> *from, TreeNode<T> *to){
+	if(from = to){
+		return;
+	}
+	TreeNode<T>  =
+}
+template<typename T>
+void printReverse(TreeNode<T> *from, TreeNode<T> *to){
+	TreeNode<T> *p = to;
+	reverse(from, to);
+	while(true){
+		cout << p->data << "\t";
+		if(p == from){
+			break;
+		}
+		p = p->r_child;
+	}
+	reverse(to, from); 
+}*/
 
 //外部查找值为et_value的二叉树结点
 template<typename T>
@@ -655,5 +729,199 @@ template<typename T>
 TreeNode<T>* BinaryTree<T>::getRoot(){
 	return root;
 }
+
+
+/* 二叉排序树常用操作 */
+
+// 外部插入新结点
+template<typename T>
+void BinaryTree<T>::pubForInsertNode(T et_value){
+	insertNode(et_value, root);
+}
+// 插入新结点
+template<typename T>
+void BinaryTree<T>::insertNode(T et_value, TreeNode<T> *p){
+/*	if(p == NULL){
+		p = new TreeNode();
+		p->data = et_value;
+	}
+	else if(et_value < p->data){
+		insertNode(et_value, t->l_child);
+	}
+	else if(et_value > p->data){
+		insertNode(et_value, t->r_child);
+	}
+	else	//相等（重复）则不做任何操作
+		;
+*/
+	while(true){
+		if(p == NULL){
+			p = new TreeNode<T>();
+			p->data = et_value;
+			break;
+		}
+		if(et_value < p->data)
+			p = p->l_child;
+		else if(et_value > p->data)
+			p = p->r_child;
+		else
+			;
+	}
+}
+
+// 外部删除指定结点
+template<typename T>
+void BinaryTree<T>::pubForRemoveNode(T et_value){
+	removeNode(et_value, root);
+}
+// 删除指定结点
+template<typename T>
+void BinaryTree<T>::removeNode(T et_value, TreeNode<T> * &p){
+	//递归实现
+/*	if(p == NULL){
+		return;		//该值未找到，停止
+	}
+	if(et_value < p->data){
+		removeNode(et_value, p->l_child);
+	}
+	else if(et_value > p->data){
+		removeNode(et_value, p->r_child);
+	}
+	else if(p->l_child != NULL && p->r_child != NULL){ 		//待删结点有两个孩子的情况
+		p->data = findMin(p->r_child)->data;		//需琢磨另一种写法
+		removeNode(p->data, p->r_child);
+	}
+	else{		//无孩子或有一个孩子情况
+		TreeNode<T> tmp = p;
+		p = (p->l_child != NULL) ? p->l_child : p->r_child;
+		delete tmp;
+	}
+*/
+	TreeNode<T> tmp;
+	while(true){
+		if(p == NULL)	break;
+		if(et_value < p->data)
+			p = p->l_child;
+		else if(et_value > p->data)
+			p = p->r_child;
+		else if(p->l_child != NULL && p->r_child != NULL){		//待删结点有两个孩子的情况
+			tmp = findMin(p->r_child); 
+			p->data = tmp->data;
+			delete tmp;
+			break;
+		}
+		else{		//无孩子或有一个孩子情况
+			tmp = p;
+			p = (p->l_child != NULL) ? p->l_child : p->r_child;
+			delete tmp;
+			break;
+		}
+	}
+}
+
+// 外部查找最大值
+template<typename T>
+void BinaryTree<T>::pubForFindMax(){
+	cout << "该二叉树的最大值为：" << findMax(root)->data << endl;
+}
+// 查找最大值
+template<typename T>
+TreeNode<T>* BinaryTree<T>::findMax(TreeNode<T> *p){
+	/* 递归实现 */
+	/*
+	if(p == NULL){
+		return NULL;
+	}
+	if(p->r_child == NULL){
+		return p;
+	}
+	return findMax(p->r_child);
+	*/
+	/* 非递归实现 */
+	/* while(p != NULL){
+		if(p->r_child == NULL){
+			return p;
+		}
+		p = p->r_child;
+	}
+	return NULL; */
+	/* 非递归实现2 */
+	if(p != NULL){
+		while(p->r_child != NULL){
+			p = p->r_child;
+		}
+	}
+	return p;
+}
+
+// 外部查找最小值
+template<typename T>
+void BinaryTree<T>::pubForFindMin(){
+	cout << "该二叉树的最小值为：" << findMin(root)->data << endl;
+}
+// 查找最小值
+template<typename T>
+TreeNode<T>* BinaryTree<T>::findMin(TreeNode<T> *p){
+	/* 递归实现 */
+	/* if(p == NULL){
+		return NULL;
+	}
+	if(p->l_child == NULL){
+		return p;
+	}
+	return findMax(p->l_child); */
+
+	/* 非递归实现 */
+	/* while(p != NULL){
+		if(p->l_child == NULL){
+			return p;
+		}
+		p = p->l_child;
+	}
+	return NULL; */
+
+	/* 非递归实现2 */
+	if(p != NULL){
+		while(p->l_child != NULL){
+			p = p->l_child;
+		}
+	}
+	return p;
+}
+
+// 外部查找二叉树是否包含指定值的结点
+template<typename T>
+bool BinaryTree<T>::pubForContains(T et_value){
+	return contains(et_value, root);
+}
+// 查找二叉树是否包含指定值的结点
+template<typename T>
+bool BinaryTree<T>::contains(T et_value, TreeNode<T> *p){
+	//递归实现
+/*	if(p == NULL){
+		return false;
+	}
+	if(et_value < p->data){
+		contains(et_value, p->l_child);
+	}
+	else if(et_value > p->data){
+		contains(et_value, p->r_child);
+	}
+	else{
+		return true;
+	}
+*/
+	//非递归实现
+	while(p != NULL){
+		if(et_value < p->data)
+			p = p->l_child;
+		else if(et_value > p->data)
+			p = p->r_child;
+		else
+			return true;
+	}
+	return false;
+}
+
 
 #endif
