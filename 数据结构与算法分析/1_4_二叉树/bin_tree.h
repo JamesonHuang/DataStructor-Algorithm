@@ -797,7 +797,7 @@ void BinaryTree<T>::removeNode(T et_value, TreeNode<T> * &p){
 		delete tmp;
 	}
 */
-	TreeNode<T> tmp;
+	TreeNode<T> *tmp, *child;
 	while(true){
 		if(p == NULL)	break;
 		if(et_value < p->data)
@@ -807,7 +807,11 @@ void BinaryTree<T>::removeNode(T et_value, TreeNode<T> * &p){
 		else if(p->l_child != NULL && p->r_child != NULL){		//待删结点有两个孩子的情况
 			tmp = findMin(p->r_child); 
 			p->data = tmp->data;
+            child = tmp->r_child;       //暂存其右孩子
 			delete tmp;
+            
+            tmp = findMin(p->r_child);
+            tmp->l_child = child;       
 			break;
 		}
 		else{		//无孩子或有一个孩子情况
