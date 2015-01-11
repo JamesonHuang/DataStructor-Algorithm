@@ -63,6 +63,10 @@
                         6.根据后序遍历序列构建二叉树（非递归）：
                             策略：
                                 A.同5类似，顺序颠倒一下就可以了
+                        7.求二叉树深度（非递归实现）
+                        8.前中后Morris遍历测试
+                        9.测试BST相关操作 + 创建二叉排序树（递归 & 非递归）
+                        10.二叉树findnode（非递归实现）
 
 
 	@ Author:		rh_Jameson
@@ -588,7 +592,7 @@ void BinaryTree<T>::PostOrder(TreeNode<T> *p, int method){
         }
         case 4:		//morris遍历
         {
-        	TreeNode<T> cur = p, pre;
+        	TreeNode<T> *cur = p, *pre;
         	while(cur != NULL){
         		if(cur->l_child == NULL){
         			cur = cur->r_child;
