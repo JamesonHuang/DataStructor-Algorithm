@@ -2,8 +2,10 @@
 	@ Title:			实现二叉树基本操作	
 
 	@ Description:		
-                        1.C++实现二叉树模板类（递归形式）
-                        2.C++实现二叉树模板类（非递归形式）					
+                        1.C++实现二叉树模板类（递归）
+                        2.C++实现二叉树模板类（非递归）
+                        3.C++实现二叉排序树模板类（递归）
+                        4.C++实现二叉排序树模板类（非递归）
 	@ Conclusion:			
 						1.构建二叉树（递归）：
 							A.判断传入字符串参数是否为空
@@ -63,6 +65,7 @@
                         6.根据后序遍历序列构建二叉树（非递归）：
                             策略：
                                 A.同5类似，顺序颠倒一下就可以了
+                        
                         7.求二叉树深度（非递归实现）
                         8.前中后Morris遍历测试
                         9.测试BST相关操作 + 创建二叉排序树（递归 & 非递归）
@@ -82,6 +85,9 @@
 //#include <deque>
 #include<queue>
 #include<stack>
+#include<vector>
+#include<algorithm>
+
 using namespace std;
 
 //二叉树类声明
@@ -135,17 +141,20 @@ public:
 	int pubForGetBTDepth();
 
 	/* 二叉排序树常用操作 */
-
+    
+    // 二叉排序树构造函数
+	//BinaryTree(vector<T> v);				
+	BinaryTree(int v[]);				
 	// 外部插入新结点
-	void insertNode(T et_value);
+	void pubForInsertNode(T &et_value);
 	// 外部删除指定结点
-	void removeNode(T et_value);
+	void pubForRemoveNode(T et_value);
 	// 外部查找最大值
-	void findMax();
+	void pubForFindMax();
 	// 外部查找最小值
-	void findMin();
+	void pubForFindMin();
 	// 外部查找二叉树是否包含指定值的结点
-	bool contains(T et_value);
+	bool pubForContains(T et_value);
 
 private:
 	TreeNode<T> *root;                  //二叉树的根指针
@@ -171,14 +180,17 @@ private:
 
 	/* 二叉排序树常用操作 */
 
+    // 构建二叉排序树
+	TreeNode<T>* createBST(int v[], int start, int end);
+	//TreeNode<T>* createBST(int v[], int start, int end);
 	// 插入新结点
-	void insertNode(T et_value, TreeNode<T> *p);
+	void insertNode(T &et_value, TreeNode<T>* &p);
 	// 删除指定结点
-	void removeNode(T et_value, TreeNode<T> *p);
+	void removeNode(T et_value, TreeNode<T>* &p);
 	// 查找最大值
-	void findMax(TreeNode<T> *p);
+	TreeNode<T>* findMax(TreeNode<T> *p);
 	// 查找最小值
-	void findMin(TreeNode<T> *p);
+	TreeNode<T>* findMin(TreeNode<T> *p);
 	// 查找二叉树是否包含指定值的结点
 	bool contains(T et_value, TreeNode<T> *p);
 };
@@ -293,6 +305,7 @@ TreeNode<T>* BinaryTree<T>::createBTree(const string &s, int &i,int method){
         }
     }
 }
+
 
 //根据前序遍历序列和中序遍历序列构建二叉树
 //失败，模板类惹的祸，只允许TreeNode<char>,待另写一个cpp实现
@@ -616,7 +629,8 @@ void BinaryTree<T>::PostOrder(TreeNode<T> *p, int method){
         }
     }
 }
-/*template<typename T>
+/*Morris 后续遍历相关函数
+ * template<typename T>
 void reverse(TreeNode<T> *from, TreeNode<T> *to){
 	if(from = to){
 		return;
@@ -737,27 +751,90 @@ TreeNode<T>* BinaryTree<T>::getRoot(){
 
 /* 二叉排序树常用操作 */
 
+// 二叉排序树构造函数
+template<typename T>
+BinaryTree<T>::BinaryTree(int v[]){
+    //vector<int> vv(v, v + sizeof(v)/sizeof(v[0]));
+    /*vector<int> vv(v, v + 10);
+    if(!vv.size()){
+        cout << "生成失败，原因：空数组" << "\t";
+        return;
+    }
+    sort(vv.begin(), vv.end());
+    */
+    sort(v, v + 10);
+    /*if(sizeof(v) / sizeof(int)){
+        cout << "生成失败，原因：空数组" << "\t";
+        return;
+    }*/
+
+    root = createBST(v, 0, 10 - 1);
+}
+ // 构建二叉排序树
+template<typename T>
+TreeNode<T>* BinaryTree<T>::createBST(int sorted_Vec[],int start,int end){
+    
+    //递归实现
+    if(end < start){
+        return NULL;
+    }
+    int mid = (start + end) / 2;
+    TreeNode<T> *node = new TreeNode<T>();
+    node->data = sorted_Vec[mid];
+    node->l_child = createBST(sorted_Vec, start, mid - 1);
+    node->r_child = createBST(sorted_Vec, mid + 1, end);
+    return node;
+    
+    //非递归实现
+/*失败，每个结点的start和end都需记住，该模板无相应属性
+ * 为避免大量修改代码，放弃实现～～
+ *  mid = (start + end) / 2;
+    stack<TreeNode<T>* > s = new stack<TreeNode<T>* >();
+    stack<int> mid_s = new stack<int>();
+    TreeNode<T> *node = new TreeNode<T>();
+    mid_s.push(end);
+    while(mid >= 0 || !s.empty()){
+        if(mid >= 0){
+            node = new TreeNode<T>();
+            node->data = sorted_Vec[mid];
+            mid_s.push(mid);
+            s.push(node);
+            node = node->l_child;
+            mid = (0 + mid - 1) / 2;
+        }
+        else{
+            mid = mid_s.top();
+            node = s.top();
+            mid_s.pop();
+            s.pop();
+            
+        }
+    }
+*/
+}
+
+
 // 外部插入新结点
 template<typename T>
-void BinaryTree<T>::pubForInsertNode(T et_value){
+void BinaryTree<T>::pubForInsertNode(T &et_value){
 	insertNode(et_value, root);
 }
 // 插入新结点
 template<typename T>
-void BinaryTree<T>::insertNode(T et_value, TreeNode<T> *p){
-/*	if(p == NULL){
-		p = new TreeNode();
+void BinaryTree<T>::insertNode(T &et_value, TreeNode<T>* &p){
+	if(p == NULL){
+		p = new TreeNode<T>();
 		p->data = et_value;
 	}
 	else if(et_value < p->data){
-		insertNode(et_value, t->l_child);
+		insertNode(et_value, p->l_child);
 	}
 	else if(et_value > p->data){
-		insertNode(et_value, t->r_child);
+		insertNode(et_value, p->r_child);
 	}
 	else	//相等（重复）则不做任何操作
 		;
-*/
+/*
 	while(true){
 		if(p == NULL){
 			p = new TreeNode<T>();
@@ -771,6 +848,7 @@ void BinaryTree<T>::insertNode(T et_value, TreeNode<T> *p){
 		else
 			;
 	}
+*/
 }
 
 // 外部删除指定结点
