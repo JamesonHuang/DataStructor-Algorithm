@@ -1,4 +1,4 @@
-/*********************************************************************
+﻿/*********************************************************************
 	@ Title:			实现二叉树基本操作	
 
 	@ Description:		
@@ -112,6 +112,7 @@ void testBST(){
     BinaryTree<int> *bt = new BinaryTree<int>(a);
     int val = 5;
     bt->pubForInsertNode(val);
+	bt->pubForRemoveNode(++val);
     cout << "构建二叉排序树ing..." << endl;
     
     cout << "二叉树前序遍历(递  归)：";
@@ -130,6 +131,11 @@ void testBST(){
 	bt->pubForLayerOrder();
 	cout << endl;
 
+	bt->pubForFindMax();
+	bt->pubForFindMin();
+	cout << bt->pubForContains(2) << endl;
+	cout << bt->pubForContains(8) << endl;
+	cout << bt->pubForContains(11) << endl;
    
 }
 

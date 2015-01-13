@@ -1,4 +1,4 @@
-/*******************************************************************************
+﻿/*******************************************************************************
 	@ Title:			实现二叉树基本操作	
 
 	@ Description:		
@@ -70,6 +70,7 @@
                         8.前中后Morris遍历测试
                         9.测试BST相关操作 + 创建二叉排序树（递归 & 非递归）
                         10.二叉树findnode（非递归实现）
+						11.BST insertNode非递归 & removeNode非递归
 
 
 	@ Author:		rh_Jameson
@@ -762,13 +763,13 @@ BinaryTree<T>::BinaryTree(int v[]){
     }
     sort(vv.begin(), vv.end());
     */
-    sort(v, v + 10);
+    sort(v, v + 9);
     /*if(sizeof(v) / sizeof(int)){
         cout << "生成失败，原因：空数组" << "\t";
         return;
     }*/
 
-    root = createBST(v, 0, 10 - 1);
+    root = createBST(v, 0, 9 - 1);
 }
  // 构建二叉排序树
 template<typename T>
@@ -822,6 +823,7 @@ void BinaryTree<T>::pubForInsertNode(T &et_value){
 // 插入新结点
 template<typename T>
 void BinaryTree<T>::insertNode(T &et_value, TreeNode<T>* &p){
+	//递归实现
 	if(p == NULL){
 		p = new TreeNode<T>();
 		p->data = et_value;
@@ -834,17 +836,19 @@ void BinaryTree<T>::insertNode(T &et_value, TreeNode<T>* &p){
 	}
 	else	//相等（重复）则不做任何操作
 		;
-/*
+
+	//非递归实现??
+/*	TreeNode<T> *cur = p;
 	while(true){
-		if(p == NULL){
-			p = new TreeNode<T>();
-			p->data = et_value;
+		if(cur == NULL){
+			cur = new TreeNode<T>();
+			cur->data = et_value;
 			break;
 		}
-		if(et_value < p->data)
-			p = p->l_child;
-		else if(et_value > p->data)
-			p = p->r_child;
+		if(et_value < cur->data)
+			cur = cur->l_child;
+		else if(et_value > cur->data)
+			cur = cur->r_child;
 		else
 			;
 	}
@@ -860,7 +864,7 @@ void BinaryTree<T>::pubForRemoveNode(T et_value){
 template<typename T>
 void BinaryTree<T>::removeNode(T et_value, TreeNode<T> * &p){
 	//递归实现
-/*	if(p == NULL){
+	if(p == NULL){
 		return;		//该值未找到，停止
 	}
 	if(et_value < p->data){
@@ -874,35 +878,38 @@ void BinaryTree<T>::removeNode(T et_value, TreeNode<T> * &p){
 		removeNode(p->data, p->r_child);
 	}
 	else{		//无孩子或有一个孩子情况
-		TreeNode<T> tmp = p;
+		TreeNode<T> *tmp = p;
 		p = (p->l_child != NULL) ? p->l_child : p->r_child;
 		delete tmp;
 	}
-*/
-	TreeNode<T> *tmp, *child;
+
+
+	//非递归实现
+/*	TreeNode<T> *cur = p, *tmp, *child;
 	while(true){
-		if(p == NULL)	break;
-		if(et_value < p->data)
-			p = p->l_child;
-		else if(et_value > p->data)
-			p = p->r_child;
-		else if(p->l_child != NULL && p->r_child != NULL){		//待删结点有两个孩子的情况
-			tmp = findMin(p->r_child); 
-			p->data = tmp->data;
+		if(cur == NULL)	break;
+		if(et_value < cur->data)
+			cur = cur->l_child;
+		else if(et_value > cur->data)
+			cur = cur->r_child;
+		else if(cur->l_child != NULL && cur->r_child != NULL){		//待删结点有两个孩子的情况
+			tmp = findMin(cur->r_child); 
+			cur->data = tmp->data;
             child = tmp->r_child;       //暂存其右孩子
 			delete tmp;
             
-            tmp = findMin(p->r_child);
+            tmp = findMin(cur->r_child);
             tmp->l_child = child;       
 			break;
 		}
 		else{		//无孩子或有一个孩子情况
-			tmp = p;
-			p = (p->l_child != NULL) ? p->l_child : p->r_child;
+			tmp = cur;
+			cur = (cur->l_child != NULL) ? cur->l_child : cur->r_child;
 			delete tmp;
 			break;
 		}
 	}
+	*/
 }
 
 // 外部查找最大值
@@ -914,7 +921,6 @@ void BinaryTree<T>::pubForFindMax(){
 template<typename T>
 TreeNode<T>* BinaryTree<T>::findMax(TreeNode<T> *p){
 	/* 递归实现 */
-	/*
 	if(p == NULL){
 		return NULL;
 	}
@@ -922,22 +928,24 @@ TreeNode<T>* BinaryTree<T>::findMax(TreeNode<T> *p){
 		return p;
 	}
 	return findMax(p->r_child);
-	*/
+	
 	/* 非递归实现 */
-	/* while(p != NULL){
+/*	while(p != NULL){
 		if(p->r_child == NULL){
 			return p;
 		}
 		p = p->r_child;
 	}
-	return NULL; */
-	/* 非递归实现2 */
+	return NULL; 
+*/
+	/* 非递归实现2 
 	if(p != NULL){
 		while(p->r_child != NULL){
 			p = p->r_child;
 		}
 	}
 	return p;
+	*/
 }
 
 // 外部查找最小值
@@ -949,30 +957,31 @@ void BinaryTree<T>::pubForFindMin(){
 template<typename T>
 TreeNode<T>* BinaryTree<T>::findMin(TreeNode<T> *p){
 	/* 递归实现 */
-	/* if(p == NULL){
+	if(p == NULL){
 		return NULL;
 	}
 	if(p->l_child == NULL){
 		return p;
 	}
-	return findMax(p->l_child); */
+	return findMin(p->l_child);
 
-	/* 非递归实现 */
-	/* while(p != NULL){
+	/* 非递归实现 
+	while(p != NULL){
 		if(p->l_child == NULL){
 			return p;
 		}
 		p = p->l_child;
 	}
-	return NULL; */
-
-	/* 非递归实现2 */
+	return NULL; 
+*/
+	/* 非递归实现2 
 	if(p != NULL){
 		while(p->l_child != NULL){
 			p = p->l_child;
 		}
 	}
 	return p;
+	*/
 }
 
 // 外部查找二叉树是否包含指定值的结点
@@ -984,7 +993,7 @@ bool BinaryTree<T>::pubForContains(T et_value){
 template<typename T>
 bool BinaryTree<T>::contains(T et_value, TreeNode<T> *p){
 	//递归实现
-/*	if(p == NULL){
+	if(p == NULL){
 		return false;
 	}
 	if(et_value < p->data){
@@ -996,9 +1005,9 @@ bool BinaryTree<T>::contains(T et_value, TreeNode<T> *p){
 	else{
 		return true;
 	}
-*/
+
 	//非递归实现
-	while(p != NULL){
+/*	while(p != NULL){
 		if(et_value < p->data)
 			p = p->l_child;
 		else if(et_value > p->data)
@@ -1007,6 +1016,7 @@ bool BinaryTree<T>::contains(T et_value, TreeNode<T> *p){
 			return true;
 	}
 	return false;
+*/
 }
 
 
