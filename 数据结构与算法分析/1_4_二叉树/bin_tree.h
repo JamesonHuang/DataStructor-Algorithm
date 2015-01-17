@@ -191,7 +191,7 @@ private:
 	// 查找最大值
 	TreeNode<T>* findMax(TreeNode<T> *p);
 	// 查找最小值
-	TreeNode<T>* findMin(TreeNode<T> *&p);
+	TreeNode<T>* findMin(TreeNode<T> *p);
 	// 查找二叉树是否包含指定值的结点
 	bool contains(T et_value, TreeNode<T> *p);
 };
@@ -889,14 +889,47 @@ void BinaryTree<T>::removeNode(T et_value, TreeNode<T> * &p){
 */
 
 	//非递归实现	
-	TreeNode<T> *cur = p, *pre, *tmp, *child;
-	if(p && !p->l_child && !p->r_child){
+/*	TreeNode<T> *cur = p, *pre, *tmp, *child;
+	if(p && !p->l_child && !p->r_child){	//只有一个节点的情况
 		p = NULL;
 		return;
 	}
 	while(true){		
-		if(cur == NULL)
+		if(cur == NULL)	break;
+		if(et_value < cur->data){
+			pre = cur;
+			cur = cur->l_child;
+		}else if(et_value > cur->data){	
+			pre = cur;
+			cur = cur->r_child;
+		}else if(cur->l_child != NULL && cur->r_child != NULL){		//待删结点有两个孩子的情况
+			tmp = findMin(cur->r_child); 
+			cur->data = tmp->data;
+            child = tmp->r_child;			//暂存其右孩子
+			pre = cur->r_child;
+			while(pre->l_child != tmp)		//找倒数第二小的结点
+				pre = pre->l_child;
+			pre->l_child = child;
+			delete tmp;
 			break;
+		}
+		else{		//无孩子或有一个孩子情况
+			tmp = cur;
+			cur = (cur->l_child != NULL) ? cur->l_child : cur->r_child;
+			(pre->l_child == tmp) ? pre->l_child = cur : pre->r_child = cur;
+			delete tmp;
+			break;
+		}
+	}
+*/
+	//非递归实现	
+	TreeNode<T> *cur = p, *pre, *tmp, *child;
+	if(p && !p->l_child && !p->r_child){	//只有一个节点的情况
+		p = NULL;
+		return;
+	}
+	while(true){		
+		if(cur == NULL)	break;		//找不到或BST为空
 		if(et_value < cur->data){
 			pre = cur;
 			cur = cur->l_child;
@@ -905,30 +938,25 @@ void BinaryTree<T>::removeNode(T et_value, TreeNode<T> * &p){
 			pre = cur;
 			cur = cur->r_child;
 		}
-		else if(cur->l_child != NULL && cur->r_child != NULL){		//待删结点有两个孩子的情况
-			tmp = findMin(cur->r_child); 
-			cur->data = tmp->data;
-            child = tmp->r_child;			//暂存其右孩子
-			pre = cur->r_child;
-			while(pre->l_child != tmp){		//找倒数第二小的结点
-				pre = pre->l_child;
+		else{		
+			if(cur->l_child != NULL && cur->r_child != NULL){	//待删结点有两个孩子的情况
+				tmp = findMin(cur->r_child); 
+				cur->data = tmp->data;
+				child = tmp->r_child;			//暂存其右孩子
+				pre = cur->r_child;
+				while(pre->l_child != tmp)	pre = pre->l_child;	//找倒数第二小的结点	
+				pre->l_child = child;
 			}
-			pre->l_child = child;
-			delete tmp;
-			break;
-		}
-		else{		//无孩子或有一个孩子情况
-			tmp = cur;
-			cur = (cur->l_child != NULL) ? cur->l_child : cur->r_child;
-			if(pre->l_child == tmp)
-				pre->l_child = cur;
-			else
-				pre->r_child = cur;
+			else{		//无孩子或有一个孩子情况
+				tmp = cur;
+				cur = (cur->l_child != NULL) ? cur->l_child : cur->r_child;
+				(pre->l_child == tmp) ? pre->l_child = cur : pre->r_child = cur;
+
+			}
 			delete tmp;
 			break;
 		}
 	}
-	
 }
 
 // 外部查找最大值
@@ -940,14 +968,14 @@ void BinaryTree<T>::pubForFindMax(){
 template<typename T>
 TreeNode<T>* BinaryTree<T>::findMax(TreeNode<T> *p){
 	/* 递归实现 */
-	if(p == NULL){
+/*	if(p == NULL){
 		return NULL;
 	}
 	if(p->r_child == NULL){
 		return p;
 	}
 	return findMax(p->r_child);
-	
+*/	
 	/* 非递归实现 */
 /*	while(p != NULL){
 		if(p->r_child == NULL){
@@ -957,14 +985,14 @@ TreeNode<T>* BinaryTree<T>::findMax(TreeNode<T> *p){
 	}
 	return NULL; 
 */
-	/* 非递归实现2 
+	/* 非递归实现2 */
 	if(p != NULL){
 		while(p->r_child != NULL){
 			p = p->r_child;
 		}
 	}
 	return p;
-	*/
+	
 }
 
 // 外部查找最小值
@@ -974,17 +1002,18 @@ void BinaryTree<T>::pubForFindMin(){
 }
 // 查找最小值
 template<typename T>
-TreeNode<T>* BinaryTree<T>::findMin(TreeNode<T> * &p){
+TreeNode<T>* BinaryTree<T>::findMin(TreeNode<T> *p){
 	/* 递归实现 */
-	if(p == NULL){
+/*	if(p == NULL){
 		return NULL;
 	}
 	//if(p->l_child == NULL || *((unsigned int *)p->l_child) == 0xFEEEFEEE ){
 	if(p->l_child == NULL){
+		p->l_child = NULL;
 		return p;
 	}
 	return findMin(p->l_child);
-
+*/
 	/* 非递归实现 
 	while(p != NULL){
 		if(p->l_child == NULL){
@@ -994,14 +1023,13 @@ TreeNode<T>* BinaryTree<T>::findMin(TreeNode<T> * &p){
 	}
 	return NULL; 
 */
-	/* 非递归实现2 
+	/* 非递归实现2 */
 	if(p != NULL){
 		while(p->l_child != NULL){
 			p = p->l_child;
 		}
 	}
 	return p;
-	*/
 }
 
 // 外部查找二叉树是否包含指定值的结点
@@ -1013,7 +1041,7 @@ bool BinaryTree<T>::pubForContains(T et_value){
 template<typename T>
 bool BinaryTree<T>::contains(T et_value, TreeNode<T> *p){
 	//递归实现
-	if(p == NULL){
+/*	if(p == NULL){
 		return false;
 	}
 	if(et_value < p->data){
@@ -1025,9 +1053,9 @@ bool BinaryTree<T>::contains(T et_value, TreeNode<T> *p){
 	else{
 		return true;
 	}
-
+*/
 	//非递归实现
-/*	while(p != NULL){
+	while(p != NULL){
 		if(et_value < p->data)
 			p = p->l_child;
 		else if(et_value > p->data)
@@ -1036,8 +1064,7 @@ bool BinaryTree<T>::contains(T et_value, TreeNode<T> *p){
 			return true;
 	}
 	return false;
-*/
-}
 
+}
 
 #endif
