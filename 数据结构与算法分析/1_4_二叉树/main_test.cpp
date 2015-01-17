@@ -103,6 +103,7 @@ void testBinaryTree()
 //---------------------2、测试二叉排序树的ADT----------------------//
 void testBST(){
     int a[] = {0, 1, 4, 2, 9, 8, 7, 6, 3};
+	//int a[10];
 /*  vector<int> v;
     for(int i = 1; i <= 10; ++i){
         v.push_back(i);
@@ -112,7 +113,7 @@ void testBST(){
     BinaryTree<int> *bt = new BinaryTree<int>(a);
     int val = 5;
     bt->pubForInsertNode(val);
-	bt->pubForRemoveNode(++val);
+
     cout << "构建二叉排序树ing..." << endl;
     
     cout << "二叉树前序遍历(递  归)：";
@@ -122,7 +123,8 @@ void testBST(){
     cout << "二叉树中序遍历(栈实现)：";
 	bt->pubForInOrder(2);
 	cout << endl;
-    
+    bt->pubForRemoveNode(4);
+	cout << "删除结点4..." << endl;
     cout << "二叉树后序遍历(栈实现)：";
     bt->pubForPostOrder(3);
     cout << endl;
