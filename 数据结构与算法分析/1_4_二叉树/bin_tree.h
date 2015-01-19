@@ -710,7 +710,8 @@ int BinaryTree<T>::pubForGetBTDepth(){
 //获得二叉树的深度
 template<typename T>
 int BinaryTree<T>::getBTDepth(TreeNode<T> *p){
-/*	int depth = 0;
+    /*递归实现
+    int depth = 0;
 	if(p != NULL){
 		int l_child_depth = getBTDepth(p->l_child);
 		int r_child_depth = getBTDepth(p->r_child);
@@ -718,7 +719,8 @@ int BinaryTree<T>::getBTDepth(TreeNode<T> *p){
         //depth = 1 + (l_child_depth >= r_child_depth ? l_child_depth : r_child_depth);
 	}
 	return depth;	
-*/
+    */
+    //非递归实现
     int depth = 0, maxDepth = 0;
     stack<TreeNode<T>*> *s = new stack<TreeNode<T>*>();
     while(p != NULL || !s->empty()){
