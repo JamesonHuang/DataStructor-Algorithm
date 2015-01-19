@@ -574,7 +574,7 @@ void BinaryTree<T>::PostOrder(TreeNode<T> *p, int method){
                         p = p->r_child;
                     }
                     else{
-                        cout << p->data << "\t";
+                        cout << p->data << "\t";    
                         pre = p;
                         SForBTree.pop();
                         p = NULL;           //!!!须置空，否则陷入死循环
