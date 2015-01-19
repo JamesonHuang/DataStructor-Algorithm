@@ -117,7 +117,7 @@ void testBST(){
     cout << "构建二叉排序树ing..." << endl;
     
     cout << "二叉树前序遍历(递  归)：";
-	bt->pubForPreOrder(1);
+	bt->pubForPreOrder(3);
 	cout << endl;
     
     cout << "二叉树中序遍历(栈实现)：";

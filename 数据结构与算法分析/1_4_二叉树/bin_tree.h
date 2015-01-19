@@ -425,18 +425,18 @@ void BinaryTree<T>::PreOrder(TreeNode<T>* p, int method){
 		case 3:		//栈实现形式二
             {   
                 stack<TreeNode<T>* > SForBTree;
-                SForBTree.push(p);
-                TreeNode<T> *tmp;
+                if(p != NULL)
+                    SForBTree.push(p);
                 while( !SForBTree.empty() ){
-                    tmp = SForBTree.top();
-                    cout << tmp->data << "\t";
+                    p = SForBTree.top();
+                    cout << p->data << "\t";
                     SForBTree.pop();
 
-                    if(tmp->r_child){
-                        SForBTree.push(tmp->r_child);
+                    if(p->r_child){
+                        SForBTree.push(p->r_child);
                     }
-                    if(tmp->l_child){
-                        SForBTree.push(tmp->l_child);
+                    if(p->l_child){
+                        SForBTree.push(p->l_child);
                     }
                 }
                 break;
@@ -583,23 +583,22 @@ void BinaryTree<T>::PostOrder(TreeNode<T> *p, int method){
         case 3:		//双栈形式实现
         {
             stack<TreeNode<T>* > s1, s2;
-            TreeNode<T> *tmp;
-            s1.push(p);
+            if(p != NULL)   s1.push(p);
             while(!s1.empty()){
-                tmp = s1.top();
+                p = s1.top();
                 s1.pop();
-                s2.push(tmp);
+                s2.push(p);
 
-                if(tmp->l_child){
-                    s1.push(tmp->l_child);
+                if(p->l_child){
+                    s1.push(p->l_child);
                 }
-                if(tmp->r_child){
-                    s1.push(tmp->r_child);
+                if(p->r_child){
+                    s1.push(p->r_child);
                 }
             }
             while(!s2.empty()){
-                tmp = s2.top();
-                cout << tmp->data << "\t";
+                p = s2.top();
+                cout << p->data << "\t";
                 s2.pop();
             }
             break;
