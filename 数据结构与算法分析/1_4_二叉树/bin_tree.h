@@ -237,18 +237,18 @@ TreeNode<T>* BinaryTree<T>::createBTree(const string &s, int &i,int method){
                 if(s[i] == '\0'){
                     break;
                 }
-                if(BTNode){
+                if(BTNode){             //向左深搜
                     SForBTree.push(BTNode);
-                    if(s[i] == '#'){
+                    if(s[i] == '#'){    //遇#置NULL
                         BTNode->l_child = NULL;
                     }
-                    else{
+                    else{               //遇其他符号则新建结点
                         BTNode->l_child = new TreeNode<T>();
                         BTNode->l_child->data = s[i];
                     }
                     BTNode = BTNode->l_child;
                 }
-                else{
+                else{                   //反过来，向右深搜
                     BTNode = SForBTree.top();
                     SForBTree.pop();
                     if(s[i] == '#'){
@@ -277,18 +277,18 @@ TreeNode<T>* BinaryTree<T>::createBTree(const string &s, int &i,int method){
                 if(cur < 0){
                     break;
                 }
-                if(node){
+                if(node){                   //向右深搜
                     SForBTree.push(node);
-                    if(s[cur] == '#'){
+                    if(s[cur] == '#'){      //遇#置NULL
                         node->r_child = NULL;
                     }
-                    else{
+                    else{                   //其他符号新建一个结点
                         node->r_child = new TreeNode<T>();
                         node->r_child->data = s[cur];
                     }
                     node = node->r_child;
                 }
-                else{
+                else{                       //反过来，向左深搜
                     node = SForBTree.top();
                     SForBTree.pop();
                     if(s[cur] == '#'){
@@ -362,7 +362,8 @@ void BinaryTree<T>::delBTree(TreeNode<T>* &p){
 		delete(p);
 		p = NULL;
 	}*/
-	//非递归实现
+    //自上而下层次遍历销毁
+	//非递归实现(自下而上后续遍历销毁)
     stack<TreeNode<T>* > SForBTree;
     TreeNode<T> *pre;
     while(p || !SForBTree.empty() ){
@@ -445,20 +446,23 @@ void BinaryTree<T>::PreOrder(TreeNode<T>* p, int method){
         {
         	TreeNode<T> *cur = p, *pre;
         	while(cur){
-        		if(!cur->l_child){
+        		if(!cur->l_child){      //左孩子为空时，输出当前结点，cur指向其右孩子
         			cout << cur->data << "\t";
         			cur = cur->r_child;
         		}
-        		else{
+        		else{                   //左孩子不为空时
         			pre = cur->l_child;
-        			while(pre->r_child != NULL && pre->r_child != cur){
+                    //找该结点的中序遍历序列的前驱结点
+        			while(pre->r_child != NULL && pre->r_child != cur){     
         				pre = pre->r_child;
         			}
-        			if(pre->r_child == NULL){
+                    //前驱结点的右孩子指向当前结点，并输出当前节点，cur指向其左孩子
+        			if(pre->r_child == NULL){   
         				pre->r_child = cur;
-        				cout << cur->data << "\t";
+        				cout << cur->data << "\t";  //与中序遍历唯一的不同！
         				cur = cur->l_child;
         			}
+                    //将前驱结点右孩子指向当前结点的连接断开，cur指向其右孩子
         			else{
         				pre->r_child = NULL;
         				cur = cur->r_child;
@@ -525,7 +529,7 @@ void BinaryTree<T>::InOrder(TreeNode<T>* p, int method){
 					}
 					else{
 						pre->r_child = NULL;
-						cout << cur->data << "\t";
+						cout << cur->data << "\t";      //与前序遍历代码的不同！
 						cur = cur->r_child;
 					}
 				}
@@ -666,7 +670,8 @@ void BinaryTree<T>::pubForFindNode(T et_value){
 //查找值为et_value的二叉树结点
 template<typename T>
 TreeNode<T>* BinaryTree<T>::findNode(TreeNode<T> *p, T et_value){
-	if(p == NULL){
+    //递归实现
+/*	if(p == NULL){
 		return NULL;
 	}
 	if(p->data == et_value){
@@ -679,6 +684,22 @@ TreeNode<T>* BinaryTree<T>::findNode(TreeNode<T> *p, T et_value){
 	else{
 		return findNode(p->r_child, et_value);
 	}
+*/
+    //非递归实现
+    stack<TreeNode<T>*> s;
+    while(p != NULL || !s.empty()){
+        if(p != NULL){
+            s.push(p);
+            p = p->l_child;
+        }
+        else{
+            p = s.top();
+            s.pop();
+            if(p->data == et_value) return p;
+            p = p->r_child;
+        }
+    }
+    return NULL;
 }
 
 //外部获得二叉树的深度
@@ -689,7 +710,7 @@ int BinaryTree<T>::pubForGetBTDepth(){
 //获得二叉树的深度
 template<typename T>
 int BinaryTree<T>::getBTDepth(TreeNode<T> *p){
-	int depth = 0;
+/*	int depth = 0;
 	if(p != NULL){
 		int l_child_depth = getBTDepth(p->l_child);
 		int r_child_depth = getBTDepth(p->r_child);
@@ -697,6 +718,28 @@ int BinaryTree<T>::getBTDepth(TreeNode<T> *p){
         //depth = 1 + (l_child_depth >= r_child_depth ? l_child_depth : r_child_depth);
 	}
 	return depth;	
+*/
+    int depth = 0, maxDepth = 0;
+    stack<TreeNode<T>*> *s = new stack<TreeNode<T>*>();
+    while(p != NULL || !s->empty()){
+        if(p != NULL){
+            s->push(p);
+            ++depth;
+            p = p->l_child;
+        }
+        else{
+            p = s->top();
+            s->pop();
+            p = p->r_child;
+            if(p == NULL){
+                if(depth > maxDepth){
+                    maxDepth = depth;
+                }   
+                depth--;
+            }
+        }
+    }
+    return maxDepth - 1;
 }
 
 //外部访问层次遍历
@@ -889,7 +932,7 @@ void BinaryTree<T>::removeNode(T et_value, TreeNode<T> * &p){
 
 	//非递归实现	
 /*	TreeNode<T> *cur = p, *pre, *tmp, *child;
-	if(p && !p->l_child && !p->r_child){	//只有一个节点的情况
+	if(p->data == et_value && !p->l_child && !p->r_child){	//只有一个节点的情况
 		p = NULL;
 		return;
 	}
@@ -923,7 +966,7 @@ void BinaryTree<T>::removeNode(T et_value, TreeNode<T> * &p){
 */
 	//非递归实现	
 	TreeNode<T> *cur = p, *pre, *tmp, *child;
-	if(p && !p->l_child && !p->r_child){	//只有一个节点的情况
+	if(p->data == et_value && !p->l_child && !p->r_child){	//只有一个节点的情况
 		p = NULL;
 		return;
 	}

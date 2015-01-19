@@ -92,8 +92,12 @@ void testBinaryTree()
 	cout << "二叉树层次遍历(队实现)：";
 	bt->pubForLayerOrder();
 	cout << endl;
-	bt->pubForFindNode("4");
 	
+	bt->pubForFindNode("4");
+	bt->pubForFindNode("11");
+	bt->pubForFindNode("5");
+	bt->pubForFindNode("7");
+	bt->pubForFindNode("8");
     cout << "二叉树深度为：" << bt->pubForGetBTDepth() << endl;
 	
     cout << "销毁二叉树是否成功：" << bt->pubForDelBTree() << endl;
@@ -143,7 +147,7 @@ void testBST(){
 
 int main()
 {
-    testBST();
-    //testBinaryTree();	
+    //testBST();
+    testBinaryTree();	
 	return 0;
 }
