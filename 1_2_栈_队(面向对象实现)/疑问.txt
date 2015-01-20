@@ -1,0 +1,23 @@
+﻿//结构体模板声明不能直接
+//
+//typedef int iter;
+//template <typename T>
+//typedef struct node
+//{
+//	T data[MaxSize];
+//	iter b;
+//}*Stack;
+//
+//下列代码为改写方式，经实践，不对
+//typedef int iter;
+//template <typename T> 
+//struct node
+//{
+//	T data[MaxSize];
+//	iter b;
+//};
+//template <typename T> 
+//struct Stack
+//{
+//	typedef struct node< T >* s;
+//}
