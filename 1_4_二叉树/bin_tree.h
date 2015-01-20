@@ -362,7 +362,8 @@ void BinaryTree<T>::delBTree(TreeNode<T>* &p){
 		delete(p);
 		p = NULL;
 	}*/
-    //自上而下层次遍历销毁
+    //待实现：自上而下层次遍历销毁
+    //
 	//非递归实现(自下而上后续遍历销毁)
     stack<TreeNode<T>* > SForBTree;
     TreeNode<T> *pre;
@@ -695,11 +696,11 @@ TreeNode<T>* BinaryTree<T>::findNode(TreeNode<T> *p, T et_value){
         else{
             p = s.top();
             s.pop();
-            if(p->data == et_value) return p;
+            if(p->data == et_value) break;
             p = p->r_child;
         }
     }
-    return NULL;
+    return p;
 }
 
 //外部获得二叉树的深度
