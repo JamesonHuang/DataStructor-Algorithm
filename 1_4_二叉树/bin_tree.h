@@ -884,10 +884,12 @@ void BinaryTree<T>::insertNode(T &et_value, TreeNode<T>* &p){
 	//非递归实现
 	TreeNode<T> *cur = p, *parent = NULL, *newNode = new TreeNode<T>();
 	newNode->data = et_value;
+	if(p == NULL){				//二叉树为空的情况
+		p = newNode;
+		return;
+	}			
 	while(true){
 		if(cur == NULL){
-			if(p == NULL)						//二叉树为空的情况
-				p = newNode;
 			if(et_value < parent->data)			//插入到叶子节点的左孩子
 				parent->l_child = newNode;
 			else
