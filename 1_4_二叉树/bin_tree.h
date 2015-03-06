@@ -711,7 +711,7 @@ int BinaryTree<T>::pubForGetBTDepth(){
 //获得二叉树的深度
 template<typename T>
 int BinaryTree<T>::getBTDepth(TreeNode<T> *p){
-    /*递归实现
+    /* 递归实现1 
     int depth = 0;
 	if(p != NULL){
 		int l_child_depth = getBTDepth(p->l_child);
@@ -721,8 +721,12 @@ int BinaryTree<T>::getBTDepth(TreeNode<T> *p){
 	}
 	return depth;	
     */
+    /* 递归实现2 
+    if(p == NULL) return 0;
+    return 1 + max(getBTDepth(p->l_child), getBTDepth(p->r_child));
+    */
     //非递归实现
-    int depth = 0, maxDepth = 0;
+/*    int depth = 0, maxDepth = 0;
     stack<TreeNode<T>*> *s = new stack<TreeNode<T>*>();
     while(p != NULL || !s->empty()){
         if(p != NULL){
@@ -743,6 +747,87 @@ int BinaryTree<T>::getBTDepth(TreeNode<T> *p){
         }
     }
     return maxDepth - 1;
+*/
+    /* 双栈形式 
+    if (p == NULL) return 0;
+    stack<TreeNode<T> *> gray;
+    stack<int> depth;
+    int maxDepth = 0;
+
+    gray.push(p);
+    depth.push(1);
+    while (!gray.empty()) {
+        TreeNode<T> *tmp = gray.top();
+        int num = depth.top();
+        gray.pop();
+        depth.pop();
+        if (tmp->l_child == NULL && tmp->r_child == NULL) {
+            maxDepth = num > maxDepth ? num : maxDepth;
+        }
+        else {
+            if (tmp->l_child != NULL) {
+                gray.push(tmp->l_child);
+                depth.push(num + 1);
+            }
+            if (tmp->r_child != NULL) {
+                gray.push(tmp->r_child);
+                depth.push(num + 1);
+            }
+        }
+    }
+    return maxDepth;
+    */
+
+    /* 队列层次遍历实现 
+    int height = 0,rowCount = 1;
+    if(root == NULL){
+        return 0;
+    }
+    queue<TreeNode<T>*> queue;
+    queue.push(p);
+    while(!queue.empty()){
+        TreeNode<T> *node = queue.front();
+        queue.pop();
+        //一层的元素个数减1，一层遍历完高度加1
+        rowCount --;
+        if(node->l_child){
+            queue.push(node->l_child);
+        }
+        if(node->r_child){
+            queue.push(node->r_child);
+        }
+        //一层遍历完
+        if(rowCount == 0){
+            //高度加1
+            height++;
+            //下一层元素个数
+            rowCount = queue.size();
+        }
+    }
+    return height;
+    */
+    /* 层次遍历树的层数,NULL为每一层节点的分割标志 */
+    if(p == NULL)return 0;
+    int res = 0;
+    queue<TreeNode<T>*> Q;
+    Q.push(p);
+    Q.push(NULL);
+    while(Q.empty() == false)
+    {
+        TreeNode<T> *p = Q.front();
+        Q.pop();
+        if(p != NULL)
+        {
+            if(p->l_child)Q.push(p->l_child);
+            if(p->r_child)Q.push(p->r_child);
+        }
+        else
+        {
+            res++;
+            if(Q.empty() == false)Q.push(NULL);
+        }
+    }
+    return res;
 }
 
 //外部访问层次遍历

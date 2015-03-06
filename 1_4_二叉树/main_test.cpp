@@ -38,6 +38,7 @@ void testBinaryTree()
 	//string s = "124###35#6###";         //先序遍历序列构建
 	string s = "12#47###3589####6##";         //先序遍历序列构建
     //string s = "12#46###3#5##";
+    //string s = "1";
     BinaryTree<string> *bt = new BinaryTree<string>(s, 2);
 
 /*  string s = "##4#2###65#31";             //后序遍历序列构建
