@@ -102,18 +102,20 @@ public:
     static void ShellSortSh(vector<int> &v){
         int len = v.size();
         int gap, i, j, tmp;
-        /* 形式一
+        /* 形式一 */
         for(gap = len / 2; gap > 0; gap /= 2){
-            for(i = gap; i < len; ++i){
+            //里面两层循环是实现插排的代码
+			for(i = gap; i < len; ++i){
                 tmp = v[i];
                 for(j = i; j >= gap && tmp < v[j - gap]; j -= gap)
                     v[j] = v[j - gap];
                 v[j] = tmp;
             }
         }
-        */
-        /* 形式二 */
-        for(gap = 1; gap <= (len - 1) / 4; gap = 2 * gap);
+        
+        /* 形式二: 
+		//初始化最大步长
+        for(gap = 1; gap <= (len - 1) / 4; gap = 2 * gap);		//普林斯顿大学给出的写法
         for(; gap > 0; gap /= 2){
             for(i = gap; i < len; ++i){
                 tmp = v[i];
@@ -122,13 +124,17 @@ public:
                 v[j] = tmp;
             }
         }
+		*/		
     }
     //希尔排序(Knuth增量)
     static void ShellSortKn(vector<int> &v){
         int len = v.size();
         int gap, i, j, tmp;
-        for(gap = 1; gap <= (len - 1) / 3; gap = 3 * gap + 1);
-        for(; gap > 0; gap /= 3){
+        //初始化最大步长
+		//for(gap = 1; gap <= (len - 1) / 9; gap = 3 * gap + 1);	//普林斯顿大学给出的写法
+		for(gap = 1; gap < len / 3; gap = 3 * gap + 1);
+        
+		for(; gap > 0; gap /= 3){
             for(i = gap; i < len; ++i){
                 tmp = v[i];
                 for(j = i; j >= gap && tmp < v[j - gap]; j -= gap)
