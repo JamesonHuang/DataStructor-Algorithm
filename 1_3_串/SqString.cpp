@@ -1,6 +1,6 @@
 #include "SqString.h"
 
-//´®µÄ¹¹Ôìº¯Êý
+//â€²?Î¼?11?Ã¬oË‰Ãªy
 SqString::SqString()
 {
 	s = new str();
@@ -8,35 +8,35 @@ SqString::SqString()
 	s->data = new char[MAXSIZE];
 }
 
-//´®µÄÎö¹¹º¯Êý
+//â€²?Î¼???11oË‰Ãªy
 SqString::~SqString()
 {
 	delete s;
 	s = NULL;
 }
 
-//»ñÈ¡SqStr
+//??Ã¨?SqStr
 str SqString::getSqStr()
 {
 	return *s;
 }
 
-//½«Ò»¸ö´®³£Á¿¸³¸øÄ¿±ê´®
+//??Ã²???â€²?3ï¿¡Ã¡??3????Â±Ãªâ€²?
 str SqString::strAssign(char* t)
 {	
-	//·½·¨Ò»£º×Ö·ûÖ¸ÕëÊý×éÐÎÊ½Ê¹ÓÃ
+	//Â·?Â·Â¨Ã²?ï¿¡oÃ—?Â·?????ÃªyÃ—Ã©D?Ãª?Ãª1Ã³?
 	/*int i = 0;
-	while(t[i] != '\0')			//±éÀú´®t
+	while(t[i] != '\0')			//Â±Ã©Ã Ãºâ€²?t
 	{
-		s->data[i] = t[i];		//¸³Öµ¸øÄ¿±ê´®				
+		s->data[i] = t[i];		//?3?Î¼????Â±Ãªâ€²?				
 		cout << s->data[i] << endl;
 		i++;				
 	}*/
 
-	//·½·¨¶þ£ºÖ±½Ó²Ù×÷Ö¸Õë
-	while(*t != '\0')			//±éÀú´®t
+	//Â·?Â·Â¨?tï¿¡o?Â±?Ã³2Ã¹Ã—Ã·????
+	while(*t != '\0')			//Â±Ã©Ã Ãºâ€²?t
 	{
-		*(s->data) = *t;		//¸³Öµ¸øÄ¿±ê´®				
+		*(s->data) = *t;		//?3?Î¼????Â±Ãªâ€²?				
 		cout << *(s->data) << endl;
 		t++;
 		s->data++;
@@ -45,47 +45,47 @@ str SqString::strAssign(char* t)
 	return *s;
 }
 
-//½«´®t¸´ÖÆ¸øÄ¿±ê´®
+//??â€²?t?â€²??????Â±Ãªâ€²?
 str SqString::strCopy(SqStr t)
 {
 	while(*(t->data) != '\0')
 	{
 		
 	}
-	//Ç³¿½±´
+	//?3??Â±â€²
 	//s = t;
 	return *s;
 }
-////ÅÐ¶Ï´®ÊÇ·ñÏàµÈ
+////?D??â€²?Ãª?Â·??Ã Î¼Ã¨
 //bool SqString::strEqual (SqStr t)
 //{
 //}
-////Çó´®³¤
+////?Ã³â€²?3Â¤
 //int SqString::strLength()
 //{
 //}
-////´®Á¬½Ó
+////â€²?Ã¡??Ã³
 //str SqString::Concat(SqStr t)
 //{
 //}
-////Çó×Ó´®
+////?Ã³Ã—Ã³â€²?
 //str SqString::subStr(int i, int j)
 //{
 //}
-////²åÈë´®
+////2?Ã¨?â€²?
 //str SqString::insertStr(int i, SqStr t)
 //{
 //}
-////É¾³ýÖ¸¶¨·¶Î§µÄ´®
+////Ã©?3y???Â¨Â·??Â§Î¼?â€²?
 //str SqString::delStr(int i, int j)
 //{
 //}
-////Ìæ»»Ö¸¶¨×Ó´®
+////Ã¬??????Â¨Ã—Ã³â€²?
 //str SqString::repStr(int i, int j, SqStr t)
 //{
 //
 //}
-////±éÀúÊä³ö´®
+////Â±Ã©Ã ÃºÃª?3?â€²?
 //void SqString::dispStr()
 //{
 //

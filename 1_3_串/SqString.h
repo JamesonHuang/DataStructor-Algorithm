@@ -22,8 +22,11 @@ public:
 	SqString();
 	//串的析构函数
 	~SqString();
-	//获取SqStr
-	str getSqStr();
+	//itoa:整型转字符串
+	//atoi:字符串转整型
+	//strcpy,strcat,strcmp,strncpy,strreplace,
+	//memcpy,memmove,memset,inet_addr
+
 	//将一个串常量赋给目标串
 	str strAssign(char* t);
 	//将串t复制给目标串
@@ -32,7 +35,7 @@ public:
 	bool strEqual (SqStr t);
 	//求串长
 	int strLength();
-	//串连接
+	//串连接StrCat
 	str Concat(SqStr t);
 	//求子串
 	str subStr(int i, int j);
@@ -42,8 +45,7 @@ public:
 	str delStr(int i, int j);
 	//替换指定子串
 	str repStr(int i, int j, SqStr t);
-	//遍历输出串
-	void dispStr();
+
 };
 
 #endif
