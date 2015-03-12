@@ -62,8 +62,8 @@ public:
         for(int i = 0; i < len; ++i){
             flag = 0;                   //初始化标记为0
             for(int j = 1; j < len - i; ++j){
-                if(v[j] < v[j - 1]){
-                    swap(v[j],v[j - 1]);
+                if(v[j] > v[j + 1]){
+                    swap(v[j],v[j + 1]);
                     flag = 1;           //发生交换，标记变量置1    
                 }
             }
@@ -146,8 +146,8 @@ public:
     //归并排序外部接口
     static void IMergeSort(vector<int> &v){
         int len = v.size();
-        //MergeSortUpToDown(v, 0, len - 1);
-        MergeSortDownToUp(v, len);
+        MergeSortUpToDown(v, 0, len - 1);
+        //MergeSortDownToUp(v, len);
         
     }
     //自顶向下归并排序实现
@@ -163,14 +163,13 @@ public:
     }
     //归并实现关键代码
     static void Merge(vector<int> &v, int start, int mid, int end){
+        //初始化临时数组
         vector<int> tmp( v.size() );
         //初始化位置坐标
-        int leftPos = start;
-        int leftEnd = mid;
-        int rightPos = mid + 1;
-        int rightEnd = end;
+        int leftPos = start, leftEnd = mid;
+        int rightPos = mid + 1, rightEnd = end;
         int tmpPos = leftPos;
-        int numElement = rightEnd - leftPos + 1;
+        int numElement = end - start + 1;
         //归并主实现
         while(leftPos <= leftEnd && rightPos <= rightEnd){
             if(v[leftPos] <= v[rightPos])
@@ -185,6 +184,7 @@ public:
         while(rightPos <= rightEnd)
             tmp[tmpPos++] = v[rightPos++];
         //拷贝回原数组
+        //for(int i = rightEnd; i >= start; --rightEnd){
         for(int i = 0; i < numElement; ++i, --rightEnd){
             v[rightEnd] = tmp[rightEnd];
         }
