@@ -30,9 +30,9 @@ int main()
     //s = new Sort(v, "InsertSort");
     //s = new Sort(v, "ShellSortSh");
     //s = new Sort(v, "ShellSortKn");
-    s = new Sort(v, "IMergeSort");
+    //s = new Sort(v, "IMergeSort");
     //s = new Sort(v, "HeapSort");
-    //s = new Sort(v, "QuickSort");
+    s = new Sort(v, "QuickSort");
     
     cout << "排序后：";
     for(int i = 0; i < 10; ++i){

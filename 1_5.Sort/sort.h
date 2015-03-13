@@ -62,8 +62,8 @@ public:
         for(int i = 0; i < len; ++i){
             flag = 0;                   //初始化标记为0
             for(int j = 1; j < len - i; ++j){
-                if(v[j] > v[j + 1]){
-                    swap(v[j],v[j + 1]);
+                if(v[j - 1] > v[j]){
+                    swap(v[j - 1],v[j]);
                     flag = 1;           //发生交换，标记变量置1    
                 }
             }
@@ -240,8 +240,8 @@ public:
     //堆排序下滤实现
     static void percDown(vector<int> &v, int iter, int len){
         int child;
-        int tmp;
-        for(tmp = v[iter]; 2 * iter + 1 < len; iter = child){
+        int tmp = v[iter];      //create hole
+        for( ; 2 * iter + 1 < len; iter = child){
             child = 2 * iter + 1;       //获取该节点的左孩子下标
             //如有右孩子，且右孩子大于左孩子，下标改成右孩子下标
             if(child != len - 1 && v[child] < v[child + 1] )
@@ -252,15 +252,15 @@ public:
             else    //否则，说明结点处于正确位置，可跳出循环
                 break;
         }
-        v[iter] = tmp;
+        v[iter] = tmp;          //把hole堵上
     }
     //快速排序
     static void QuickSort(vector<int> &v){
         QuickSortRecursion(v, 0, v.size() - 1);
     }
     static void QuickSortRecursion(vector<int> &v, int left, int right){
-        /* 优化做法 
-        if(left + 2 <= right){
+        /* 优化做法 */
+        if(left + 5 <= right){
             int pivot = getPivot(v, left, right);
             int front = left;
             int rear = right - 1;
@@ -281,8 +281,8 @@ public:
         else{
             InsertSortForQSort(v, left, right);
         }
-        */
-        /* 纯快排做法 */
+        
+        /* 纯快排做法 
         if(right - left <= 1){                      //递归出口，小于两个元素情况的处理
             if(v[left] > v[right])
                 swap(v[left],v[right]);
@@ -304,7 +304,7 @@ public:
         swap(v[front], v[right - 1]);   //将枢纽元放到正确位置
         QuickSortRecursion(v, left, front - 1);     //sort small elements
         QuickSortRecursion(v, front + 1, right);    //sort large elements
-        
+        */
     }   
     //三数中值取枢纽元
     static int getPivot(vector<int> &v, int left, int right){
@@ -326,7 +326,7 @@ private:
         int tmp, i, j;
         for(i = left + 1; i <= right; ++i){
             tmp = v[i];
-            for(j = i; j > 0 && tmp < v[j - 1]; --j)
+            for(j = i; j >= left && tmp < v[j - 1]; --j)
                 v[j] = v[j - 1];
             v[j] = tmp;
         }
