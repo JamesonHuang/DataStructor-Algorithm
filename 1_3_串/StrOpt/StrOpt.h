@@ -141,6 +141,38 @@ public:
         }
         return buffer;
     }
+
+    /* strcmp */
+	int StrCmp(string str1, string str2){
+	    //保证str1和str2不为空
+	    assert(!str1.empty() && !str2.empty());
+	    int res = 0, iter = 0;
+		int len = str1.size() > str2.size() ? str2.size() : str1.size();
+	    //判断iter位置，str1和str2是否相同
+	    while(iter < len && !(res = str1[iter] - str2[iter]) ){
+			++iter;
+	    }
+	    if(res > 0)	    	return 1;
+	    else if(res < 0)   	return -1;
+	    //如果有一个字符串结束，作相应处理
+		if(iter == len && res == 0){
+			return str1.size() > str2.size() ? 1 : -1;
+		}
+	    return 0;
+	}
+	//strcat
+	void StrCat(string &src, string &dest){
+	    //保证str1和str2不为空
+	    assert(!src.empty() && !dest.empty());
+	    //重置大小
+	    dest.resize(dest.size() + src.size() );
+		int iter_dest = 0, iter_src = 0, len = dest.size();
+	    //定位到目标串结尾处
+	    while(dest[iter_dest] != '\0')	++iter_dest;
+	    //将原串连接到目标串尾部
+	    while(iter_dest < len && (dest[iter_dest++] = src[iter_src++]) != '\0');
+	}
+
 private:
 
 };

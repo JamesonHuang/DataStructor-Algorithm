@@ -15,12 +15,21 @@ using namespace std;
 
 int main()
 {
-
-    /* memset test cases: */
+	/* strcmp & strcat test cases */
+	string s1 = "aa";
+	string s2 = "1234";
+	char *s3 = "aa", *s4 = "1234";
+	cout << StrCmp(s2, s1) << endl;
+	cout << strcmp(s4, s3) << endl;
+	StrCat(s1, s2);
+	cout << s2 << endl;
+	
+    /* memset test cases: 
     char ch[10];
     StrOpt str_opt;
     str_opt.memset(ch, '1',10 * sizeof(char));
     cout << ch << endl;
+    */
     /*
     int a[10];
     StrOpt str_opt;
