@@ -173,7 +173,7 @@ private:
 	//内部后序遍历
 	void PostOrder(TreeNode<T>* p, int method);
 	//内部层次遍历
-    void LayerOrder(TreeNode<T> *p);  
+    	void LayerOrder(TreeNode<T> *p);  
 	//内部查找值为et_value的二叉树结点
 	TreeNode<T>* findNode(TreeNode<T> *p, T et_value);    
 	//内部获得二叉树的深度
@@ -181,7 +181,7 @@ private:
 
 	/* 二叉排序树常用操作 */
 
-    // 构建二叉排序树
+    	// 构建二叉排序树
 	TreeNode<T>* createBST(int v[], int start, int end);
 	//TreeNode<T>* createBST(int v[], int start, int end);
 	// 插入新结点
@@ -443,8 +443,8 @@ void BinaryTree<T>::PreOrder(TreeNode<T>* p, int method){
                 }
                 break;
         	}
-        case 4:		//Morris遍历
-        {
+        	case 4:		//Morris遍历
+        	{
         	TreeNode<T> *cur = p, *pre;
         	while(cur){
         		if(!cur->l_child){      //左孩子为空时，输出当前结点，cur指向其右孩子
@@ -470,6 +470,7 @@ void BinaryTree<T>::PreOrder(TreeNode<T>* p, int method){
         			}
         		}
         	}
+        	break;
         }
     }
 }
@@ -535,6 +536,7 @@ void BinaryTree<T>::InOrder(TreeNode<T>* p, int method){
 					}
 				}
 			}
+			break;
 		}
 	}
 	
@@ -631,6 +633,7 @@ void BinaryTree<T>::PostOrder(TreeNode<T> *p, int method){
         			}
         		}
         	}
+        	break;
         }
     }
 }
